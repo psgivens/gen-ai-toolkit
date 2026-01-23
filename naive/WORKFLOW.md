@@ -30,12 +30,12 @@ about requirements;
 note right
   Read MISSION.md
   Generate initial questions
-  Create QUESTIONS.md
+  Create GATHER_REQUIREMENTS.md
 end note
 
 |User|
 :Review and answer
-questions in QUESTIONS.md;
+questions in GATHER_REQUIREMENTS.md;
 note right
   User provides answers
   to initial questions
@@ -48,7 +48,7 @@ repeat
   note right
     Review user answers
     Generate 5 follow-up questions
-    Update QUESTIONS.md
+    Update GATHER_REQUIREMENTS.md
   end note
 
   |User|
@@ -65,7 +65,7 @@ repeat while (Questions finalized?) is (no)
 :Step 3: Build requirements
 document;
 note right
-  Read MISSION.md and QUESTIONS.md
+  Read MISSION.md and GATHER_REQUIREMENTS.md
   Create REQUIREMENTS.md
 end note
 
@@ -189,7 +189,7 @@ These steps follow a linear progression where Claude generates a document and th
 ### Documents Created
 
 1. **MISSION.md** - User-created description of what they're trying to accomplish (Initial step)
-2. **QUESTIONS.md** - Requirements discovery questions and answers (Steps 1-2)
+2. **GATHER_REQUIREMENTS.md** - Requirements discovery questions and answers (Steps 1-2)
 3. **REQUIREMENTS.md** - Functional requirements document (Step 3)
 4. **DECISIONS.md** - Implementation decisions with options and trade-offs (Steps 4-5)
 5. **DESIGN.md** - Technical design/architecture document (Step 6)

@@ -12,13 +12,17 @@ This repository chronicles the evolution of my approach to AI-assisted developme
 
 Each approach represents a stage in learning how to work effectively with AI coding assistants, capturing lessons learned and practical patterns that actually work in real-world development.
 
+A good way to understand the process is to look at the [workflow diagram from the naive approach](./naive/Naive%20Approach%20Workflow.png).
+
 ---
 
-## The Journey
+## My AI Development Journey
 
-### Phase 1: The Naive Approach
+I've been using AI for about a year now. In 2025, I learned a valuable lesson about building a workflow around development. After all, garbage in garbage out. In this new world of AI development, we are the deciders and AI is the implementor. This workflow aims to build a process where we focus on making decisions so that AI can implement. 
 
-When I first started exploring AI-assisted development with Claude Code, I needed structure. Rather than figuring out what to ask Claude on the fly, I created a straightforward, document-driven workflow with pre-written prompts that guide you through the entire development process.
+### The Naive Approach
+
+When I first started exploring AI-assisted development with Claude Code, I needed structure. I found myself writing the same or similar prompts over and over, so I created a straightforward, document-driven workflow with pre-written prompts that guide you through the entire development process.
 
 The **naive approach** breaks down software creation into 10 sequential steps, each producing specific documents that build on each other. You tell Claude which step to execute, and it generates the corresponding artifacts:
 
@@ -29,7 +33,7 @@ The **naive approach** breaks down software creation into 10 sequential steps, e
 
 **Key characteristics:**
 - **10-step workflow**: From requirements gathering through implementation
-- **Document-driven**: Each step creates or refines documents (MISSION.md → QUESTIONS.md → REQUIREMENTS.md → DECISIONS.md → DESIGN.md → IMPLEMENTATION_PLAN.md)
+- **Document-driven**: Each step creates or refines documents (MISSION.md → GATHER_REQUIREMENTS.md → REQUIREMENTS.md → DECISIONS.md → DESIGN.md → IMPLEMENTATION_PLAN.md)
 - **Iterative review points**: Steps 2 and 5 are designed for repeated refinement
 - **Pre-written prompts**: All step instructions are captured in [PROCESSING.md](./naive/PROCESSING.md)
 - **Simple execution model**: Just tell Claude "execute step N"
@@ -43,7 +47,7 @@ The **naive approach** breaks down software creation into 10 sequential steps, e
 **Example workflow:**
 1. Create MISSION.md describing what you want to build
 2. Execute step 1: Claude asks clarifying questions
-3. Answer questions in QUESTIONS.md
+3. Answer questions in GATHER_REQUIREMENTS.md
 4. Execute step 2: Claude asks follow-up questions (repeat as needed)
 5. Execute step 3: Claude generates REQUIREMENTS.md
 6. ... continue through all 10 steps
@@ -51,7 +55,7 @@ The **naive approach** breaks down software creation into 10 sequential steps, e
 
 For complete details, see the [Naive Approach README](./naive/README.md) and the [Visual Workflow](./naive/WORKFLOW.md).
 
-### Phase 2: Evolution to the Template Approach
+### Evolution to the Template Approach
 
 After working with the naive approach, I wanted to leverage Claude Code's features more effectively. I asked Claude: *"How can I best leverage Claude features to improve my workflow?"*
 
@@ -101,7 +105,7 @@ This evolution required some back-and-forth with Claude and iterative refinement
 
 For complete details, see the [Template Approach README](./template/claude/README.md) and individual skill files in `.claude/skills/`.
 
-### Phase 3: Adding the Refinement Workflow
+### Adding the Refinement Workflow
 
 The 5-phase development workflow works great for building new features from scratch, but what about maintenance tasks? Documentation updates, refactoring, code cleanup, and reorganization don't need the full requirements → decisions → architecture → plan → implement cycle.
 

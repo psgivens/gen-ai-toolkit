@@ -26,8 +26,8 @@ The workflow consists of 10 sequential steps, with each step producing or refini
 
 ### Steps Overview
 
-1. **Ask and answer questions about requirements** - Claude reads your MISSION.md and creates a QUESTIONS.md file with initial questions
-2. **Read answers and ask follow-up questions** *(iterative)* - Claude reviews your answers and adds clarifying questions to QUESTIONS.md (repeat as needed)
+1. **Ask and answer questions about requirements** - Claude reads your MISSION.md and creates a GATHER_REQUIREMENTS.md file with initial questions
+2. **Read answers and ask follow-up questions** *(iterative)* - Claude reviews your answers and adds clarifying questions to GATHER_REQUIREMENTS.md (repeat as needed)
 3. **Build requirements document** - Claude creates a new REQUIREMENTS.md file based on your mission and answers
 4. **Ask and answer questions about implementation decisions** - Claude creates a DECISIONS.md file with design choices, options, and trade-offs
 5. **Review and update DECISIONS** *(iterative)* - Claude refines the decisions based on your feedback and answers (repeat as needed)
@@ -81,7 +81,7 @@ The key is to work through the steps systematically, taking time at the decision
 Throughout the workflow, Claude will create a set of documents that capture the evolution of your project:
 
 - **MISSION.md** - Your starting point (you create this before step 1)
-- **QUESTIONS.md** - Requirements discovery questions and your answers (created in steps 1-2)
+- **GATHER_REQUIREMENTS.md** - Requirements discovery questions and your answers (created in steps 1-2)
 - **REQUIREMENTS.md** - Functional requirements document (created in step 3)
 - **DECISIONS.md** - Implementation decisions with options and trade-offs (created in steps 4-5)
 - **DESIGN.md** - Technical design and architecture (created in step 6)

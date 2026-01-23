@@ -1,7 +1,7 @@
 # Building process with AI
 
 This document contains the 'steps' I use when building with claude code.
-There are steps that I repeat. 
+There are steps that I repeat (Steps 2 and 5 are designed for iteration). 
 
 
 ## Building the scripts. 
@@ -9,20 +9,23 @@ There are steps that I repeat.
 
 Step 1. Ask and answer questions about requirements
 Prompt:
-> Read the MISSION.md to determine what we are doing. 
-> Ask me questions in QUESTIONS.md to help determine requirements. 
-> Ask me about what I want to happen, inputs, and outputs. Do not ask
-> me about implementation or how we are going to acheive it. Leave
-> an area for me to provide my answers. 
+> Read MISSION.md to determine what we are doing.
+> Create GATHER_REQUIREMENTS.md and ask me 8-10 questions to help determine requirements.
+> Focus on WHAT I want to happen, inputs, outputs, and edge cases. Do not ask
+> about implementation or HOW we will achieve it.
+> Leave space after each question for my answers. 
 
 Step 2: Read answers and ask follow up questions
-Prompt: 
-> I've answered the questions in QUESTIONS.md. Create a new section with any follow up questions you may have. Keep this short, maybe 5 questions
+Prompt:
+> I've answered the questions in GATHER_REQUIREMENTS.md. Read my answers and create a new
+> section with up to 5 follow-up questions based on my responses.
 
 Step 3: Build requirements document
-Prompt: 
+Prompt:
 > Based on our mission in MISSION.md and the answers I've given you in
-> QUESTIONS.md, create an a requirements document REQUIREMENTS.md
+> GATHER_REQUIREMENTS.md, create a requirements document REQUIREMENTS.md.
+> Include: functional requirements, non-functional requirements, constraints,
+> and explicitly state what is out of scope.
 
 Step 4: Ask and answer questions about implementation decisions
 Prompt: 
@@ -36,9 +39,12 @@ Prompt:
 > I may have. 
 
 Step 5: Review and update DECISIONS
-Prompt: 
-> I've made dedits to DECISIONS.md including making decisions and asking follow up questions. Where the decision seems final, document it that way. Where there are questions, answer the questions and update the decision request. If a decision is no longer valid based 
-> on other decisions, you can remove it. 
+Prompt:
+> I've made edits to DECISIONS.md including making decisions and asking
+> follow-up questions. Where the decision seems final, mark it as DECIDED.
+> Where there are questions, answer them and update the decision request.
+> If a decision is no longer valid based on other decisions, mark it as
+> INVALIDATED or remove it. 
 
 Step 6. Create a design document
 Prompt: 
@@ -46,27 +52,30 @@ Prompt:
 > document, DESIGN.md. 
 
 Step 7. Create an implementation plan
-Prompt: 
-> Based on the REQUIREMENTS.md and DESIGN.md documents, create an implementation 
-> plan. The plan should have an overview of what we are trying to accomplish,
-> steps to implement the script, and status tracking. 
-> Each step should contain a prompt in order to execute the step and should 
-> tell claude to execute the step within a subagent. 
-> When a user tells claude to execute the plan, claude should have enough instructions
-> to know to execute each step and to update the status tracking. 
+Prompt:
+> Based on the REQUIREMENTS.md and DESIGN.md documents, create an implementation
+> plan IMPLEMENTATION_PLAN.md. The plan should include:
+> - Overview of what we are trying to accomplish
+> - Numbered implementation steps
+> - Status tracking table
+> - Each step should contain enough detail that it could be executed independently
+> When a user tells Claude to execute the plan, Claude should execute each step
+> sequentially and update the status tracking as each step completes. 
 
 Step 8. Review the plan
-Prompt: In a subagent
-> Read the IMPLEMENTATION_PLAN.md, REQUIREMENTS.md, DECISIONS.md and DESIGN.md. 
-> Write a PLAN_ANALYSIS.md which tells me if the implementation plan will achieve 
-> what is set out in the requirements and decisions made. 
+Prompt (execute in a subagent):
+> Read IMPLEMENTATION_PLAN.md, REQUIREMENTS.md, DECISIONS.md, and DESIGN.md.
+> Create PLAN_ANALYSIS.md which evaluates whether the implementation plan will
+> achieve what is set out in the requirements and honor the decisions made.
+> Identify any gaps, risks, or missing steps. 
 
 Step 9. Update the plan
-> Read the IMPLEMENTATION_PLAN.md, REQUIREMENTS.md, and DECISIONS.md and based 
-> on analysis in PLAN_ANALYSIS.md, update the IMPLEMENTATION_PLAN.md to 
-> address any gaps. 
+Prompt:
+> Read IMPLEMENTATION_PLAN.md, REQUIREMENTS.md, DECISIONS.md, and based
+> on the analysis in PLAN_ANALYSIS.md, update IMPLEMENTATION_PLAN.md to
+> address any gaps identified. 
 
-Step 10. Execute the implementaiton plan
-Prompt: 
+Step 10. Execute the implementation plan
+Prompt:
 > Execute IMPLEMENTATION_PLAN.md and update the status tracking along the way. 
 
