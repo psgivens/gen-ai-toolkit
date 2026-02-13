@@ -1,14 +1,14 @@
 # Gen AI Development Kit
 
-A collection of structured methodologies for building software with AI assistance, documenting my journey from straightforward prompts to sophisticated, skill-based workflows.
+A collection of structured methodologies for building software with AI assistance, documenting my journey from straightforward prompts to reusable, interview-based workflows.
 
 ## What This Repository Contains
 
 This repository chronicles the evolution of my approach to AI-assisted development, from initial experiments to refined methodologies that balance human control with AI capabilities:
 
 - **[Naive Approach](./naive/)** - Where it all began: a document-driven, 10-step workflow using pre-written prompts
-- **[Template Approach](./template/)** - An evolved system with Claude Code skills, task folders, and phased development
-- **Refinement Workflows** - Streamlined processes for maintenance tasks and documentation
+- **[Workflow Approach](./workflows/)** - Reusable, symlink-based workflows with interview-driven development phases
+- **Specialized Workflows** - Documentation, refinement, and other focused processes
 
 Each approach represents a stage in learning how to work effectively with AI coding assistants, capturing lessons learned and practical patterns that actually work in real-world development.
 
@@ -55,101 +55,124 @@ The **naive approach** breaks down software creation into 10 sequential steps, e
 
 For complete details, see the [Naive Approach README](./naive/README.md) and the [Visual Workflow](./naive/WORKFLOW.md).
 
-### Evolution to the Template Approach
+### Evolution to the Workflow Approach
 
-After working with the naive approach, I wanted to leverage Claude Code's features more effectively. I asked Claude: *"How can I best leverage Claude features to improve my workflow?"*
+After working with the naive approach, I wanted something more flexible and reusable. Instead of copying template files into each project, I asked: *"How can I create reusable workflows that work across all my projects?"*
 
-Through that conversation, we evolved the naive approach into something more sophisticated: a **template-based system with Claude Code skills**. This wasn't a complete redesign—it was a thoughtful evolution that kept what worked while adding powerful new capabilities.
+The answer: **symlink-based workflows with interview-driven development**. This approach keeps the human-in-the-loop philosophy while making workflows truly reusable and maintainable.
 
-**What changed from naive → template:**
+**What changed from naive → workflows:**
 
-| Naive Approach | Template Approach |
+| Naive Approach | Workflow Approach |
 |----------------|-------------------|
-| 10 sequential steps | 5 distinct phases |
-| Manual step tracking | Claude Code skills (semantic slash commands) |
-| Single document set | Task-specific folders with dates |
-| "Execute step 3" | `execute .claude/skills/requirements` |
+| 10 sequential steps | 7 reusable workflows |
+| Copy PROCESSING.md per project | Symlink to global workflows directory |
+| Manual step tracking | Interview-based Q&A pattern |
+| "Execute step 3" | `execute ~/.workflows/requirements` |
+| Single workflow file | Separate workflow files per phase |
 
 **Key improvements:**
 
-1. **Skills as Semantic Commands** - Instead of numbered steps, phases have descriptive names:
+1. **Reusable via Symlinks** - Install once, use everywhere:
    ```bash
-   execute .claude/skills/requirements  # Phase 1: Requirements discovery
-   execute .claude/skills/decisions     # Phase 2: Design decisions
-   execute .claude/skills/architecture  # Phase 3: Architecture design
-   execute .claude/skills/plan          # Phase 4: Implementation planning
-   execute .claude/skills/implement     # Phase 5: Execute implementation
+   ln -s ~/repos/gen-ai-dev-kit/workflows ~/.workflows
+   cd any-project/
+   execute ~/.workflows/requirements
    ```
 
-2. **Task Folders** - Each feature/task gets its own dated folder:
+2. **Interview-Based Pattern** - Bidirectional Q&A for each phase:
+   - Claude asks up to 15 questions to understand your needs
+   - You answer questions AND ask your own questions back
+   - Claude researches and responds to your questions
+   - Claude asks 5 follow-up questions based on your answers
+   - Iterate until clarity is achieved
+
+3. **Workflow Phases**:
+   ```bash
+   execute ~/.workflows/requirements   # Discover what to build
+   execute ~/.workflows/design        # Make architectural decisions
+   execute ~/.workflows/architecture  # Design system structure
+   execute ~/.workflows/plan          # Create implementation plan
+   execute ~/.workflows/implement     # Execute with status tracking
+   execute ~/.workflows/documentation # Create docs
+   execute ~/.workflows/refinement    # Refactor existing code
+   ```
+
+4. **Task Folders** - Each feature/task gets its own dated folder:
    ```
    claude/
-   ├── 2026-01-22-add-authentication/
-   │   ├── MISSION.md
-   │   ├── REQUIREMENTS.md
-   │   ├── DECISIONS.md
-   │   └── ...
-   └── 2026-01-23-build-api/
-       └── ...
+   └── 2026-01-27-add-authentication/
+       ├── REQUIREMENTS_INTERVIEW.md
+       ├── REQUIREMENTS.md
+       ├── DESIGN_INTERVIEW.md
+       ├── DESIGN.md
+       ├── ARCHITECTURE_INTERVIEW.md
+       ├── ARCHITECTURE.md
+       ├── PLAN_INTERVIEW.md
+       └── IMPLEMENTATION_PLAN.md
    ```
 
-3. **Automatic Context Management** - Skills remember the current task folder throughout your session
-
-4. **Review Gates** - Explicit prompts between phases: "Type 'iterate' to review or 'continue to next phase'"
-
-5. **Portable Skills** - Skill definitions travel with your template and work across projects
+5. **Automatic Updates** - Pull latest workflow improvements for all projects:
+   ```bash
+   cd ~/repos/gen-ai-dev-kit
+   git pull origin main
+   # All projects using ~/.workflows get updates automatically
+   ```
 
 **The collaborative process:**
 
-This evolution required some back-and-forth with Claude and iterative refinement, but the result is a system that's in pretty good shape. It maintains the human-in-the-loop approach of the naive workflow while leveraging Claude Code's skill system for better organization and discoverability.
+This evolution maintains the structured, human-in-the-loop approach while adding true reusability. Workflows are version-controlled, shareable, and continuously improved without per-project maintenance.
 
-For complete details, see the [Template Approach README](./template/claude/README.md) and individual skill files in `.claude/skills/`.
+For complete details, see the [Workflows README](./workflows/README.md) and [Patterns Documentation](./workflows/PATTERNS.md).
 
-### Adding the Refinement Workflow
+### Specialized Workflows
 
-The 5-phase development workflow works great for building new features from scratch, but what about maintenance tasks? Documentation updates, refactoring, code cleanup, and reorganization don't need the full requirements → decisions → architecture → plan → implement cycle.
+While the main development workflows (requirements → design → architecture → plan → implement) work great for building new features, specialized workflows handle focused tasks more efficiently.
 
-That's where the **refinement workflow** comes in: a streamlined process that maintains the same human-in-the-loop approach but without the overhead of comprehensive architectural design.
+**Available Specialized Workflows:**
 
-**The refinement skill:**
+1. **Refinement** - For maintenance and improvement tasks:
+   ```bash
+   execute ~/.workflows/refinement
+   ```
 
-```bash
-execute .claude/skills/refinement
-```
+2. **Documentation** - For creating comprehensive project documentation:
+   ```bash
+   execute ~/.workflows/documentation
+   ```
 
 **What makes refinement different:**
 
-| Development Workflow | Refinement Workflow |
-|---------------------|---------------------|
-| 5 phases (requirements, decisions, architecture, plan, implement) | Single skill (goals → questions → plan → execute) |
+| Development Workflows | Refinement Workflow |
+|----------------------|---------------------|
+| 5 phases (requirements, design, architecture, plan, implement) | Single streamlined workflow |
 | Best for new features | Best for maintenance tasks |
-| MISSION.md, REQUIREMENTS.md, DECISIONS.md, DESIGN.md, IMPLEMENTATION_PLAN.md | REFINEMENT.md, REFINEMENT_QUESTIONS.md, REFINEMENT_PLAN.md |
-| Comprehensive architectural decisions | Focused clarifying questions |
+| Multiple interview rounds | Focused clarifying questions |
+| Comprehensive architectural decisions | Quick iteration on existing code |
 
 **When to use refinement:**
-- Creating or updating documentation
 - Refactoring existing code
 - Global renaming (functions, classes, variables)
 - Code cleanup and consistency improvements
 - Performance optimizations
 - Reorganizing files or directories
 
-**Example refinement workflow:**
-1. Execute the refinement skill
-2. Fill out REFINEMENT.md (what you want to refine and why)
-3. Answer clarifying questions in REFINEMENT_QUESTIONS.md
-4. Review REFINEMENT_PLAN.md with detailed steps
-5. Type "execute" to implement the changes
+**When to use documentation:**
+- Creating ARCHITECTURE.md
+- Writing user guides and API documentation
+- Creating developer navigation docs (docs/code/)
+- Adding directory READMEs
+- Generating Architecture Decision Records (ADRs)
 
-**Key point:** Refinement isn't "quick and dirty"—it maintains the same level of human control and review gates as the development workflow. It's just optimized for focused improvements rather than greenfield development.
+**Key point:** All workflows maintain the same level of human control and review gates. They're just optimized for different types of work—refinement for code improvements, documentation for comprehensive docs, and development workflows for greenfield features.
 
-For complete details, see the [Refinement Skill](./template/.claude/skills/refinement/skill.md) and the refinement section in the [Template README](./template/claude/README.md#refinement-activity).
+For complete details, see the [Workflows README](./workflows/README.md) with detailed descriptions of each workflow.
 
 ---
 
 ## Choosing Your Approach
 
-With three methodologies available, which one should you use? Here's a decision guide:
+With multiple methodologies available, which one should you use? Here's a decision guide:
 
 ### Use the Naive Approach When:
 - ✅ You prefer explicit, numbered steps
@@ -157,46 +180,58 @@ With three methodologies available, which one should you use? Here's a decision 
 - ✅ You like seeing the entire workflow in a single document ([PROCESSING.md](./naive/PROCESSING.md))
 - ✅ You're new to structured AI-assisted development
 - ✅ You want the simplest possible execution model ("execute step N")
+- ✅ You're working on a single, straightforward project
 
-**Best for:** Straightforward projects, learning the fundamentals, teams that prefer prescriptive guidance
+**Best for:** Learning the fundamentals, simple projects, understanding the core philosophy
 
-### Use the Template Development Workflow When:
+### Use the Workflow Development Phases When:
 - ✅ You're building a new feature or system from scratch
-- ✅ Requirements are unclear and need discovery
+- ✅ Requirements are unclear and need discovery through interviews
 - ✅ You need to make significant architectural decisions
 - ✅ You want comprehensive design documentation
-- ✅ You prefer semantic commands over numbered steps
-- ✅ You're working on multiple features simultaneously (task folders)
+- ✅ You're working on multiple projects or features
+- ✅ You want workflows that update automatically via git pull
 
-**Best for:** Complex new features, greenfield projects, teams that value comprehensive planning
+**Best for:** Complex new features, greenfield projects, professional development work
 
-### Use the Template Refinement Workflow When:
-- ✅ You're improving existing code or documentation
+### Use the Workflow Refinement When:
+- ✅ You're improving existing code
 - ✅ The scope is focused (specific files or components)
 - ✅ You don't need extensive architectural design
 - ✅ You still want human-in-the-loop control and review gates
-- ✅ You're doing maintenance tasks (refactoring, cleanup, documentation)
+- ✅ You're doing maintenance tasks (refactoring, cleanup)
 
-**Best for:** Documentation updates, code refactoring, cleanup tasks, focused improvements
+**Best for:** Code refactoring, cleanup tasks, performance optimizations
+
+### Use the Workflow Documentation When:
+- ✅ You need to create or update project documentation
+- ✅ You want to generate ARCHITECTURE.md or user guides
+- ✅ You're creating developer navigation docs
+- ✅ You need Architecture Decision Records (ADRs)
+
+**Best for:** Documentation creation, onboarding materials, architectural docs
 
 ### Key Factors to Consider
 
-| Factor | Naive Approach | Template Development | Template Refinement |
-|--------|---------------|---------------------|---------------------|
-| **Complexity** | Low to Medium | Medium to High | Low to Medium |
-| **Learning Curve** | Gentle | Moderate | Gentle (if familiar with template) |
-| **Setup** | Copy PROCESSING.md | Copy entire template | Use template's refinement skill |
-| **Structure** | 10 numbered steps | 5 phased skills | Single skill |
-| **Best For** | New users, simple projects | Complex features | Maintenance tasks |
-| **Control Level** | High (review each step) | High (review each phase) | High (review plan) |
+| Factor | Naive Approach | Workflow Development | Workflow Refinement | Workflow Documentation |
+|--------|---------------|---------------------|---------------------|----------------------|
+| **Complexity** | Low to Medium | Medium to High | Low to Medium | Medium |
+| **Learning Curve** | Gentle | Moderate | Gentle | Gentle |
+| **Setup** | Copy PROCESSING.md | Create symlink once | Use symlink | Use symlink |
+| **Structure** | 10 numbered steps | 5 interview phases | Single interview | Single interview |
+| **Reusability** | Per-project copy | Symlink (global) | Symlink (global) | Symlink (global) |
+| **Best For** | Learning, simple projects | Complex features | Code improvements | Documentation |
+| **Control Level** | High (review each step) | High (review each phase) | High (review plan) | High (review plan) |
 
 ### Can I Mix Approaches?
 
-Absolutely! Many developers:
+Absolutely! A typical evolution:
 - Start with the **naive approach** to learn the fundamentals
-- Adopt the **template development workflow** for complex features
-- Use **template refinement** for ongoing maintenance
-- Keep the naive approach around for simple one-off scripts
+- Install **workflows via symlink** for all projects
+- Use **workflow development phases** for complex features
+- Use **workflow refinement** for ongoing maintenance
+- Use **workflow documentation** when you need comprehensive docs
+- Keep the naive approach available for teaching others
 
 The approaches share the same core philosophy: human-in-the-loop development with clear decision points. Choose based on project needs, not dogma.
 
@@ -213,14 +248,34 @@ The approaches share the same core philosophy: human-in-the-loop development wit
 
 **→ [Read the Naive Approach README](./naive/README.md)**
 
-### Getting Started with the Template Approach
+### Getting Started with Workflows
 
-1. Copy the [template/](./template/) folder to your project
-2. For a new feature: `execute .claude/skills/requirements`
-3. For maintenance tasks: `execute .claude/skills/refinement`
-4. Follow the workflow prompts
+1. **Install workflows globally:**
+   ```bash
+   # Clone the repository
+   git clone https://github.com/your-repo/gen-ai-dev-kit.git ~/repos/gen-ai-dev-kit
 
-**→ [Read the Template Approach README](./template/claude/README.md)**
+   # Create symlink
+   ln -s ~/repos/gen-ai-dev-kit/workflows ~/.workflows
+   ```
+
+2. **Use in any project:**
+   ```bash
+   cd your-project/
+
+   # For new features
+   execute ~/.workflows/requirements
+
+   # For maintenance
+   execute ~/.workflows/refinement
+
+   # For documentation
+   execute ~/.workflows/documentation
+   ```
+
+3. **Follow the interview prompts** - Answer questions, ask your own, iterate until complete
+
+**→ [Read the Workflows README](./workflows/README.md)**
 
 ---
 
@@ -233,27 +288,34 @@ gen-ai-dev-kit/
 │   ├── PROCESSING.md               # The 10-step workflow with prompts
 │   └── WORKFLOW.md                 # Visual workflow diagram
 │
-├── template/                       # Template approach methodology
-│   ├── .claude/                    # Claude Code configuration
-│   │   ├── CLAUDE.md               # Project-specific instructions
-│   │   └── skills/                 # Workflow skills
-│   │       ├── requirements/       # Phase 1: Requirements discovery
-│   │       ├── decisions/          # Phase 2: Design decisions
-│   │       ├── architecture/       # Phase 3: Architecture design
-│   │       ├── plan/               # Phase 4: Implementation planning
-│   │       ├── implement/          # Phase 5: Execute implementation
-│   │       └── refinement/         # Streamlined refinement workflow
+├── workflows/                      # Reusable workflow definitions (symlink to ~/.workflows)
+│   ├── README.md                   # Comprehensive workflow guide
+│   ├── PATTERNS.md                 # Core pattern definitions
 │   │
-│   ├── claude/                     # Task-specific workflow artifacts
-│   │   ├── README.md               # Guide to template approach
-│   │   ├── CLAUDE_RECOMMENDATIONS.md  # Optimization tips
-│   │   └── CLAUDE_BACKLOG.md       # Future enhancements
+│   ├── requirements/               # Requirements discovery workflow
+│   │   └── workflow.md
+│   ├── design/                     # Design decisions workflow
+│   │   └── workflow.md
+│   ├── architecture/               # Architecture design workflow
+│   │   └── workflow.md
+│   ├── plan/                       # Implementation planning workflow
+│   │   └── workflow.md
+│   ├── implement/                  # Implementation execution workflow
+│   │   └── workflow.md
+│   ├── documentation/              # Documentation creation workflow
+│   │   └── workflow.md
+│   ├── refinement/                 # Refinement workflow
+│   │   └── workflow.md
 │   │
-│   ├── docs/                       # Additional documentation
-│   │   └── GETTING_STARTED.md      # Setup without Claude Code
-│   │
-│   └── examples/                   # Example task structures
-│       └── EXAMPLE_MISSION.md      # Template for MISSION.md
+│   └── templates/                  # Document templates
+│       ├── ARCHITECTURE_TEMPLATE.md
+│       ├── ADR_TEMPLATE.md
+│       └── CLAUDE_PROJECT_TEMPLATE.md
+│
+├── claude/                         # Example usage and documentation
+│   ├── CLAUDE_PREP.md              # Documentation philosophy
+│   ├── FEATURE_BREAKDOWN_GUIDE.md  # Feature planning guide
+│   └── SUGGESTIONS.md              # Workflow improvement ideas
 │
 └── README.md                       # This file
 ```
@@ -267,18 +329,28 @@ Start with the **naive approach**. It provides clear, numbered steps and pre-wri
 
 **→ [Naive Approach README](./naive/README.md)**
 
+### If You're Ready for Production Workflows
+Install the **workflow system** via symlink and use interview-based development for all your projects.
+
+**→ [Workflows README](./workflows/README.md)**
+
 ### If You're Building a Complex Feature
-Use the **template development workflow**. It provides comprehensive requirements discovery, architectural decision-making, and implementation planning.
+Use the **workflow development phases** (requirements → design → architecture → plan → implement) for comprehensive feature development.
 
-**→ [Template Development Workflow](./template/claude/README.md#development-activity)**
+**→ [Development Workflows](./workflows/README.md#available-workflows)**
 
-### If You're Doing Maintenance or Documentation
-Use the **template refinement workflow**. It provides the same human-in-the-loop control with a streamlined process optimized for focused improvements.
+### If You're Doing Maintenance or Refactoring
+Use the **refinement workflow** for focused code improvements with human-in-the-loop control.
 
-**→ [Template Refinement Workflow](./template/claude/README.md#refinement-activity)**
+**→ [Refinement Workflow](./workflows/README.md#available-workflows)**
+
+### If You Need Documentation
+Use the **documentation workflow** to create ARCHITECTURE.md, user guides, developer navigation docs, and ADRs.
+
+**→ [Documentation Workflow](./workflows/README.md#documentation-philosophy)**
 
 ### If You Want to Understand the Philosophy
-Read about the journey above, explore the documentation in each folder, and see how the methodologies evolved to balance human control with AI capabilities.
+Read about the journey above, explore the [Patterns Documentation](./workflows/PATTERNS.md), and see how the methodologies evolved to balance human control with AI capabilities.
 
 ---
 
