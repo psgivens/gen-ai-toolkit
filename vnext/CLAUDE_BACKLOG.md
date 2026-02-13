@@ -68,6 +68,70 @@ Consider adding these utility skills after using v1.0 on 2-3 projects:
 
 **When to add:** If requirements frequently change mid-project requiring restarts.
 
+## Version 1.5 (Process Enhancements)
+
+Workflow improvements based on real usage feedback:
+
+### Roadmap/Backlog Workflow
+**Purpose:** Break down product roadmap or backlog into manageable tasks before starting requirements
+
+**Value proposition:** Prevents scope creep and overcommitment. Helps prioritize multiple features and plan execution sequence.
+
+**How it works:**
+- Create `claude/roadmap/` folder for tracking
+- Conduct interview about all features in backlog
+- Generate ROADMAP.md with feature breakdown, priorities, dependencies
+- Recommend implementation sequence (Phase 1, 2, 3...)
+- Suggest which feature to start with
+- Track feature completion status
+
+**When to add:** If you work on projects with multiple features or maintain a product backlog.
+
+**Reference:** See SUGGESTIONS.md suggestion #6
+
+### Scope Breakdown Recommendations
+**Purpose:** Detect large scope early and recommend breaking down work into smaller features
+
+**Value proposition:** Prevents "biting off more than you can chew". Ships working software faster through incremental delivery.
+
+**How it works:**
+- After reading MISSION.md in requirements workflow, assess scope
+- If Large/Very Large (15+ requirements, 20+ implementation steps), prompt for breakdown
+- Suggest 2-5 smaller features with priorities and sizes
+- Update MISSION.md to focus on Phase 1 only
+- Create FUTURE_PHASES.md documenting later phases
+- Guide user through Phase 1 before starting Phase 2
+
+**When to add:** If you frequently start projects that feel overwhelming or never get completed.
+
+**Reference:** See SUGGESTIONS.md suggestion #7
+
+### Explicit Testing Guidance ("Ralph Wiggum Loop")
+**Purpose:** Integrate continuous testing throughout workflows instead of treating testing as separate phase
+
+**Value proposition:** Catches issues early when they're easier to fix. Never mark steps complete with failing tests.
+
+**How it works:**
+- Add Testing Convention section to PATTERNS.md
+- Requirements phase: Capture test scenarios and edge cases
+- Design phase: Choose testing frameworks and approach
+- Architecture phase: Design for testability
+- Planning phase: Include test creation as explicit steps with "implement → test → verify → next" sequence
+- Implementation phase: Enforce "never mark complete with failing tests" rule
+
+**Testing step structure in implementation plans:**
+```
+### Step N: Test [Feature]
+**What:** Create tests for [functionality]
+**Files:** test files to create
+**Test Cases:** specific scenarios
+**Verification:** All tests pass with [command]
+```
+
+**When to add:** If you ship bugs or discover test gaps during implementation.
+
+**Reference:** See SUGGESTIONS.md suggestion #5
+
 ## Version 2.0 (Composite Skills)
 
 Combine related operations for specific workflows:

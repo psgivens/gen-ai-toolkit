@@ -93,14 +93,22 @@ When starting an interview:
    - Separator `---` between questions
 5. **Prompt user** with standardized format:
    ```
-   I've created [FILE] with initial questions about [context]. Please:
+   I've created [FILE] with initial questions about [context].
+
+   Please fill out the interview document:
    1. Answer the questions in the 'Your Answer' sections
    2. Ask any questions you have in the 'Your Questions for Claude' sections
-   3. Type 'iterate' when ready for me to respond
+   3. Type 'iterate' when you're ready for me to respond
+
+   What 'iterate' does:
+   - I'll read your answers and questions
+   - I'll research and answer your questions (may include code examples, codebase exploration)
+   - I'll ask 5 follow-up questions based on your answers
+   - We'll repeat this cycle until you have enough clarity
 
    What would you like to do?
-   - Type 'iterate' to continue the interview (I'll answer your questions and ask follow-ups)
-   - Type 'continue to next phase' to [context-specific next step]
+   - Type 'iterate' - Continue the interview (I answer your questions + ask follow-ups)
+   - Type 'continue to next phase' - Skip to generating [OUTPUT_DOCUMENT] with answers so far
    ```
 6. **Wait for user response** (do not proceed until user responds)
 
@@ -125,12 +133,12 @@ When user types **'iterate'** during an interview:
 5. **Prompt again** with standardized format:
    ```
    I've updated [FILE] with:
-   - Responses to your questions
-   - [N] follow-up questions based on your answers
+   - My responses to your questions (see "Claude's Responses" section)
+   - [N] follow-up questions based on your answers (see "Interview Round [N]" section)
 
    What would you like to do?
-   - Type 'iterate' to continue the interview
-   - Type 'continue to next phase' to [context-specific next step]
+   - Type 'iterate' - Continue the interview (answer the new questions, I'll respond again)
+   - Type 'continue to next phase' - Generate [OUTPUT_DOCUMENT] based on our conversation so far
    ```
 6. **Wait for user response**
 7. **Repeat** if user types 'iterate' again
@@ -147,15 +155,17 @@ When user types **'continue to next phase'** during an interview:
    ```
    I've generated [FILE] based on our interview.
 
-   What would you like to do?
-   - Type 'iterate' to review and refine the document
-   - Type 'continue to next phase' to [move to next workflow]
+   What would you like to do next?
+   - Tell me specific changes to make (e.g., "Change section 3 to emphasize X", "Add details about Y")
+   - Type 'execute ~/.workflows/[next-workflow]' to continue to [next workflow name]
+
+   I'll make any edits you request and confirm the changes.
    ```
 6. **Wait for user response**
-7. **If 'iterate':** Read feedback, update document, prompt again (repeat as needed)
-8. **If 'continue':** Announce completion and suggest next workflow
+7. **If user requests changes:** Make the edits, confirm what changed, prompt again with same format (repeat as needed)
+8. **If user continues to next workflow:** Announce completion and confirm they can proceed
 
-**Note:** Document iteration is different from interview iteration. During document iteration, you're refining a completed document, not continuing an interview with new questions.
+**Note:** Document review is conversational - users tell you what changes they want, you make them. No special commands needed.
 
 ### Phase-Specific Interview Behaviors
 
@@ -253,15 +263,146 @@ Each phase customizes the interview pattern with specific focuses:
 
 ### Standard Prompt Format
 
-**Always use this format when prompting:**
+**During Interview Phase** (gathering information):
 
 ```
 What would you like to do?
-- Type 'iterate' to [context-specific action]
-- Type 'continue to next phase' to [context-specific next step]
+- Type 'iterate' - [Explain what iterate does: answer questions + ask follow-ups]
+- Type 'continue to next phase' - [Explain what continues: generate output document]
 ```
 
-Keep language consistent and concise to reduce cognitive load.
+**During Document Review Phase** (refining generated output):
+
+```
+What would you like to do next?
+- Tell me specific changes to make (e.g., "Change X to Y", "Add details about Z")
+- Type 'execute ~/.workflows/[next]' to continue to [next workflow name]
+```
+
+Keep language consistent and explicit to reduce cognitive load. Always explain what actions will happen, don't assume users know what commands mean.
+
+## Research Spike Pattern
+
+A research spike is a pause in the interview where Claude identifies information gaps and provides instructions for gathering missing data before continuing with more questions.
+
+### When to Use
+
+Use research spikes when:
+- User answers reveal gaps in Claude's understanding (missing codebase knowledge, unclear existing patterns)
+- Questions depend on information Claude doesn't have access to
+- User explicitly requests research before answering more questions
+- Design/architecture questions require understanding existing code patterns
+
+### Process
+
+1. **Identify Research Needs** (during interview iteration)
+
+   While processing user answers, determine if additional information would significantly improve follow-up questions.
+
+   Examples of research needs:
+   - Existing architecture patterns (how is X currently implemented?)
+   - API contracts or interfaces (what does the external API look like?)
+   - Performance benchmarks (what are current response times?)
+   - User data formats (what does the actual input look like?)
+   - Technology stack details (what version of Y are we using?)
+
+2. **Create Research Section in Interview**
+
+   Instead of generating follow-up questions, add research spike section:
+
+   ```markdown
+   ## Research Spike (Round N)
+
+   Before continuing with more questions, I need to gather information to make better recommendations.
+
+   ### Research Item 1: [Name]
+   **What I need:** [Specific information needed]
+   **Why:** [How this will improve the interview]
+   **How to provide it:**
+   - Option A: [e.g., "Run `find . -name 'api*.ts'` and share the file list"]
+   - Option B: [e.g., "Share the file path to your API documentation"]
+   - Option C: [e.g., "Describe how user authentication currently works"]
+
+   ### Research Item 2: [Name]
+   **What I need:** [Specific information]
+   **Why:** [Benefit]
+   **How to provide it:**
+   - [Concrete instructions]
+
+   ---
+
+   **When you've provided the research items above, type 'iterate' to continue the interview.**
+
+   **Pending Research:** 2 items (see above)
+   ```
+
+3. **Wait for Research**
+
+   User provides requested information in conversation or by pointing to files/data.
+   User types 'iterate' when ready to continue.
+
+4. **Process Research and Continue**
+
+   - Read and analyze provided information
+   - Use research to inform follow-up questions
+   - Continue normal interview cycle with improved context
+   - Resume standard "Interview Round N+1" format
+
+### Integration with Interview Pattern
+
+In **Interview Pattern → Step 2: Interview Iteration Cycle**, add after step 3:
+
+**3a. Evaluate Research Needs:**
+   - Based on user's answers, determine if additional information would significantly improve next questions
+   - If research needed: Create Research Spike section (see Research Spike Pattern)
+   - If no research needed: Proceed to generate follow-up questions (step 4)
+
+### Example Research Spike
+
+```markdown
+## Research Spike (Round 2)
+
+Before continuing with architecture questions, I need to understand your current codebase better.
+
+### Research Item 1: Existing UI Component Patterns
+**What I need:** Examples of how you currently build UI components
+**Why:** So I can recommend patterns consistent with your existing code
+**How to provide it:**
+- Share path to 2-3 existing component files, OR
+- Describe your component structure (class-based? functional? hooks?)
+
+### Research Item 2: Current Database Schema
+**What I need:** Your user and authentication table structures
+**Why:** To recommend auth approach that fits your existing schema
+**How to provide it:**
+- Share the schema file path, OR
+- Run `psql -d mydb -c '\d users'` and paste output
+
+---
+
+**When you've provided these items, type 'iterate' to continue.**
+
+**Pending Research:** 2 items
+```
+
+### Tracking Research Spikes
+
+At the top of each interview round that includes a research spike, add status indicator:
+
+```markdown
+## Interview Round 3
+**Pending Research:** 2 items - see Research Spike section below
+```
+
+This makes it immediately visible that the interview is blocked on research.
+
+### Best Practices
+
+- Request only essential research (2-4 items max)
+- Provide multiple options for providing data (file path, command output, description)
+- Explain the "why" so users understand the value
+- Group related research items together
+- Resume quickly after research is provided
 
 ## Task Folder Management Pattern
 
@@ -358,12 +499,13 @@ Workflows follow a standard sequence. This pattern defines how to move between w
 
 ### Standard Sequence
 
-1. **Requirements** → Design → Architecture → Plan → Implement
-2. **Design** → Architecture → Plan → Implement
-3. **Architecture** → Plan → Implement
-4. **Plan** → Implement
-5. **Implement** → (completion)
-6. **Refinement** → Can be invoked at any time independently
+1. **Requirements** → Design → Architecture → Plan → Implement → Documentation
+2. **Design** → Architecture → Plan → Implement → Documentation
+3. **Architecture** → Plan → Implement → Documentation
+4. **Plan** → Implement → Documentation
+5. **Implement** → Documentation
+6. **Documentation** → (completion)
+7. **Refinement** → Can be invoked at any time independently
 
 ### Progression Language
 
@@ -378,6 +520,7 @@ When completing a phase, use this format:
 - "Design phase complete! Continue to the architecture workflow to create the detailed architecture."
 - "Architecture phase complete! Continue to the plan workflow to create the implementation plan."
 - "Implementation plan is finalized! Continue to the implement workflow to begin execution."
+- "Implementation complete! Continue to the documentation workflow to create user-facing documentation."
 
 ### Path-Agnostic Guidance
 
@@ -521,3 +664,284 @@ The patterns work together to create a complete workflow system:
    - Iterate on document if needed
 6. **Workflow Progression**: Announce completion and suggest next workflow
 7. User invokes next workflow in sequence
+
+## Documentation Standards
+
+Based on principles from `claude/CLAUDE_PREP.md`, workflows create focused, high-value documentation that makes codebases easy to navigate without over-documenting.
+
+### Documentation Philosophy
+
+**Goal:** Create just enough documentation to make navigation efficient, without creating maintenance burden through over-documentation.
+
+**Key Principle:** Focus on "why" not "what" - code shows what, documentation explains why.
+
+### Documentation Types
+
+#### Navigation Documentation (Makes codebase easy to navigate)
+
+**ARCHITECTURE.md** (Project root)
+- **Purpose:** Single source of truth for system design
+- **Created by:** Architecture workflow (can be created/updated by documentation workflow)
+- **Key sections:** Directory structure, entry points, architectural patterns, common operations, technology stack
+- **Audience:** All developers (human and AI)
+- **Most valuable document per CLAUDE_PREP.md**
+
+**docs/CLAUDE.md** (Project-specific guidelines)
+- **Purpose:** Development guidelines, patterns, gotchas specific to this codebase
+- **Created by:** Documentation workflow
+- **Key sections:** Build/test commands, key patterns, common gotchas, integration points
+- **Audience:** Developers working on this project
+- **Complements global ~/.claude/CLAUDE.md**
+
+**docs/code/** (Component guides)
+- **Purpose:** Deep dives on complex subsystems
+- **Created by:** Documentation workflow
+- **Examples:** Plugin system guide, state management guide, API layer guide
+- **Audience:** Developers working on or integrating with these subsystems
+- **Only for complex areas - not every directory**
+
+**Directory READMEs**
+- **Purpose:** Quick orientation to directory contents
+- **Created by:** Documentation workflow
+- **Format:** Brief (1-2 paragraphs + file list)
+- **Location:** In each major directory
+- **Keep minimal - just enough for quick understanding**
+
+#### Decision Documentation (Explains "why")
+
+**docs/adrs/** (Architecture Decision Records)
+- **Purpose:** Record significant architectural decisions with context and rationale
+- **Created by:** Design workflow for significant decisions
+- **Format:** Use ADR_TEMPLATE.md
+- **Audience:** Future developers understanding why choices were made
+- **Examples:** Database selection, framework choice, architectural pattern
+
+#### User Documentation (Explains how to use)
+
+**README.md** (Project root)
+- **Purpose:** Project overview and quick start
+- **Created by:** Documentation workflow
+- **Audience:** First-time users, potential adopters
+- **Standard location**
+
+**docs/** (User guides, API docs)
+- **Purpose:** Detailed usage instructions
+- **Created by:** Documentation workflow
+- **Examples:** USER_GUIDE.md, API.md, DEPLOYMENT.md
+- **Audience:** End users, API consumers, administrators
+
+### Documentation Quality Standards
+
+#### ✅ Good Documentation
+
+- **Explains "why" not just "what"**
+  - Good: "Use transactions here to prevent race conditions in concurrent updates"
+  - Bad: "This function updates the database"
+
+- **Focuses on high-value information**
+  - Document: Entry points, complex patterns, integration points, gotchas
+  - Don't document: Obvious code, every function, generated code
+
+- **Provides concrete examples**
+  - Include actual code from the codebase
+  - Show complete, runnable examples
+  - Include expected output
+
+- **Identifies entry points and common operations**
+  - Where does execution start?
+  - How do I add a new [feature]?
+  - Where do components wire together?
+
+- **Stays up-to-date with code changes**
+  - Update ARCHITECTURE.md when patterns change
+  - Add to CLAUDE.md when gotchas discovered
+  - Remove outdated information immediately
+
+#### ❌ Avoid
+
+- **Auto-generated function docs** - Creates noise, low signal-to-noise ratio
+- **File/class indices** - Claude can search efficiently with Glob/Grep
+- **Documenting obvious code** - If code is clear, don't duplicate in docs
+- **Over-verbose API documentation** - Focus on concepts and examples, not every parameter
+- **Documentation that duplicates code comments** - Comments explain inline "why", docs explain architecture
+
+### When to Create Documentation
+
+| Phase | Documentation | Location | Trigger |
+|-------|--------------|----------|---------|
+| **Architecture** | ARCHITECTURE.md | Root | Always create during architecture phase |
+| **Design** | ADR | docs/adrs/ | Only for significant decisions (prompted) |
+| **Implementation** | Code comments | Inline | For non-obvious logic only |
+| **Documentation** | All docs | docs/, docs/code/ | After implementation complete |
+
+### Document Locations
+
+Standard locations per `claude/CLAUDE_PREP.md`:
+
+```
+project-root/
+├── ARCHITECTURE.md          # System architecture (root for visibility)
+├── README.md               # Project overview (standard location)
+├── docs/
+│   ├── CLAUDE.md          # Project development guidelines
+│   ├── [user docs]        # USER_GUIDE.md, API.md, etc.
+│   ├── code/              # Developer navigation docs
+│   │   ├── [SUBSYSTEM]_GUIDE.md
+│   │   └── ...
+│   └── adrs/              # Architecture Decision Records
+│       ├── ADR-001-[title].md
+│       └── ...
+├── [major-dir]/
+│   └── README.md          # Directory orientation
+└── ...
+```
+
+### Maintaining Documentation
+
+#### Update Documentation When:
+
+- ✅ **Architectural patterns change** → Update ARCHITECTURE.md
+  - Example: Switch from REST to GraphQL, change state management approach
+  - Who: Developer making the change
+  - How: Update relevant sections, commit with "docs: update architecture"
+
+- ✅ **Significant decisions are made** → Create ADR via design workflow
+  - Example: Choose database, select framework, pick architectural pattern
+  - Who: Design workflow (automated prompt)
+  - How: Use ADR_TEMPLATE.md
+
+- ✅ **New patterns emerge** → Add to docs/CLAUDE.md
+  - Example: New error handling pattern, new testing approach
+  - Who: Developer establishing the pattern (after using it 2+ times)
+  - How: Add to Key Patterns section with example
+
+- ✅ **Documentation becomes outdated** → Fix immediately
+  - **Outdated docs are worse than no docs** - they mislead
+  - Who: Anyone who notices
+  - How: Update immediately, don't defer
+
+- ✅ **Common gotchas discovered** → Add to docs/CLAUDE.md
+  - Example: Database connection leak, race condition, configuration issue
+  - Who: Developer who discovered and fixed it
+  - How: Add to Common Gotchas section with problem/solution
+
+#### Don't Over-Maintain:
+
+- ❌ Don't document every code change
+- ❌ Don't create changelogs in architecture docs (use git)
+- ❌ Don't duplicate what's in code comments
+- ❌ Don't maintain indices that get stale
+
+### Documentation Quality Checklist
+
+When creating or updating documentation, verify:
+
+**ARCHITECTURE.md:**
+- [ ] Directory structure is complete with purposes
+- [ ] Entry points are identified with file paths
+- [ ] Architectural patterns are explained with examples
+- [ ] Common operations are documented (how to add X)
+- [ ] Technology stack lists specific versions
+- [ ] Design principles are concrete with examples
+
+**docs/CLAUDE.md:**
+- [ ] Build/test commands work (tested them)
+- [ ] Key patterns have code examples from actual codebase
+- [ ] Common gotchas have solutions
+- [ ] Integration points list actual external systems
+- [ ] File locations are specific paths
+
+**Component Guides (docs/code/):**
+- [ ] Only created for genuinely complex subsystems
+- [ ] Explains "how it works" not just "what files exist"
+- [ ] Includes concrete examples from codebase
+- [ ] Documents common operations (how to add/modify)
+- [ ] Lists common issues with solutions
+
+**ADRs (docs/adrs/):**
+- [ ] Context explains why decision was needed
+- [ ] Decision is specific and concrete
+- [ ] Rationale explains why this option chosen
+- [ ] Alternatives are listed with pros/cons and why rejected
+- [ ] Consequences (positive/negative) are documented
+
+**Directory READMEs:**
+- [ ] Brief (1-2 paragraphs max)
+- [ ] Lists key files with purposes
+- [ ] Links to detailed guides if they exist
+- [ ] Doesn't duplicate what's obvious from filenames
+
+### Examples
+
+#### Good Documentation Example
+
+**ARCHITECTURE.md Entry Points section:**
+```markdown
+## Entry Points
+
+- **Main entry point:** `src/main.ts` - Application starts here, initializes all services
+- **API server:** `src/api/server.ts` - Express server setup, middleware registration
+- **Plugin orchestration:** `src/plugins/index.ts` - Where all plugins are registered and initialized
+- **Database connection:** `src/db/connection.ts` - Database pool setup, migration runner
+```
+
+**Why good:** Specific file paths, explains what happens there, immediately actionable.
+
+#### Bad Documentation Example
+
+**Directory README that's too verbose:**
+```markdown
+# src/utils Directory
+
+This directory contains utility functions that are used throughout the application.
+
+## Files
+
+### arrayUtils.ts
+Contains utility functions for array manipulation including:
+- map() - Maps over an array
+- filter() - Filters array elements
+- reduce() - Reduces array to single value
+[... continues for 20 more functions]
+
+### stringUtils.ts
+[... equally verbose]
+```
+
+**Why bad:** Too much detail on obvious functionality, creates maintenance burden, low value.
+
+**Better version:**
+```markdown
+# src/utils
+
+Shared utility functions used across the application.
+
+## Key Files
+- `arrayUtils.ts` - Array manipulation helpers
+- `stringUtils.ts` - String formatting and validation
+- `dateUtils.ts` - Date parsing and formatting
+
+See individual files for function-level documentation.
+```
+
+### Measuring Documentation Effectiveness
+
+You'll know documentation is working when:
+
+✅ **Claude can start work without extensive exploration** - ARCHITECTURE.md provides quick orientation
+
+✅ **Claude references docs when implementing** - "Following the pattern in docs/CLAUDE.md..."
+
+✅ **You don't explain same patterns repeatedly** - Patterns are documented once, referenced many times
+
+✅ **New contributors onboard faster** - Clear entry points and common operations
+
+✅ **Architectural decisions are clear** - ADRs explain the "why" behind choices
+
+✅ **Documentation stays current** - Team updates docs as code changes
+
+❌ **Documentation is failing if:**
+- Claude still needs extensive exploration after reading docs
+- You're constantly explaining things that should be documented
+- Documentation is out of sync with code
+- Documentation is so verbose no one reads it

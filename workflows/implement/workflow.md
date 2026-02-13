@@ -79,9 +79,9 @@ When all steps are complete:
    ```
    Implementation complete! All steps in claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md are done.
 
-   What would you like to do?
-   - Type 'iterate' to refine or fix any issues
-   - Type 'continue to next phase' if satisfied with the implementation
+   What would you like to do next?
+   - Tell me about any issues to fix or refinements to make
+   - Continue to the documentation workflow to create user-facing documentation
    ```
 
 ## Best Practices

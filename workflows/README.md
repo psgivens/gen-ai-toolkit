@@ -25,7 +25,74 @@ Workflows are structured conversation guides that Claude follows to help you:
 | **Architecture** | `execute ~/.workflows/architecture` | Design system structure, components, and data flows |
 | **Plan** | `execute ~/.workflows/plan` | Create detailed implementation plan with dependencies |
 | **Implement** | `execute ~/.workflows/implement` | Execute plan step-by-step with status tracking |
+| **Documentation** | `execute ~/.workflows/documentation` | Create user docs and codebase navigation documentation |
 | **Refinement** | `execute ~/.workflows/refinement` | Refactor, reorganize, or clean up existing code |
+
+## Documentation Philosophy
+
+These workflows follow the principles in `claude/CLAUDE_PREP.md` for creating focused, high-value documentation.
+
+### What We Document
+
+**High-Value Documentation:**
+- **ARCHITECTURE.md** - Single source of truth for system design (created by architecture workflow, can be created/updated by documentation workflow)
+- **docs/CLAUDE.md** - Project-specific development guidelines (created by documentation workflow)
+- **docs/code/** - Component guides for complex subsystems (created by documentation workflow)
+- **docs/adrs/** - Architecture Decision Records (created by design workflow for significant decisions)
+- **Directory READMEs** - Quick orientation to directory contents (created by documentation workflow)
+- **User documentation** - README, user guides, API docs (created by documentation workflow)
+
+### What We Avoid
+
+- ❌ **Auto-generated API docs** - Creates noise, focus on high-level guides instead
+- ❌ **File indices** - Claude can glob/grep efficiently, no need for manual indices
+- ❌ **Over-documented obvious code** - Code comments should explain "why" not "what"
+- ❌ **Massive UML diagrams** - Use simple diagrams for complex flows only
+- ❌ **Generated code documentation** - Document patterns and how to use them, not every function
+
+### When Documentation is Created
+
+| Phase | Documentation Created | Location | Purpose |
+|-------|----------------------|----------|---------|
+| **Architecture** | ARCHITECTURE.md | Project root | System design and patterns |
+| **Design** | ADR (if significant decision) | docs/adrs/ | Record architectural choices |
+| **Implementation** | Code comments | Inline | Explain non-obvious logic |
+| **Documentation** | All documentation | docs/, docs/code/ | User docs + navigation docs |
+
+### Documentation Locations
+
+Following `claude/CLAUDE_PREP.md` recommendations:
+
+```
+project-root/
+├── ARCHITECTURE.md          # System architecture (root for visibility)
+├── README.md               # Project overview (standard location)
+├── docs/
+│   ├── CLAUDE.md          # Project development guidelines
+│   ├── USER_GUIDE.md      # User-facing documentation
+│   ├── API.md             # API documentation
+│   ├── code/              # Developer navigation docs
+│   │   ├── PLUGIN_GUIDE.md
+│   │   ├── STATE_GUIDE.md
+│   │   └── ...
+│   └── adrs/              # Architecture Decision Records
+│       ├── ADR-001-[title].md
+│       └── ...
+├── [major-dir]/
+│   └── README.md          # Directory orientation
+└── ...
+```
+
+### Maintaining Documentation
+
+**Update documentation when:**
+- ✅ Architectural patterns change (update ARCHITECTURE.md)
+- ✅ Significant decisions are made (create ADR via design workflow)
+- ✅ New patterns emerge (add to docs/CLAUDE.md)
+- ✅ Documentation becomes outdated (fix immediately)
+- ✅ Common gotchas are discovered (add to docs/CLAUDE.md)
+
+**Don't let documentation rot** - Outdated docs are worse than no docs.
 
 ## Installation
 

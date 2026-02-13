@@ -41,6 +41,28 @@ Template:
 
     [How will you know this is successful?]
 
+    ## Design Tenets
+
+    <!--
+    Tenets guide design decisions and trade-offs. When multiple options are viable,
+    tenets help choose the right one. List your priorities in order of importance.
+
+    Examples:
+    - "Robustness over performance" (correctness more important than speed)
+    - "Simplicity over features" (prefer simple solutions, avoid complexity)
+    - "User experience over developer convenience" (prioritize end-user needs)
+    - "Security over convenience" (prefer secure-by-default even if harder to use)
+    - "Explicit over implicit" (prefer clear, obvious code over clever abstractions)
+    - "Consistency over novelty" (follow existing patterns rather than new approaches)
+    - "Maintainability over cleverness" (code should be easy to understand and modify)
+    -->
+
+    **Tenet 1:** [Your most important design principle]
+
+    **Tenet 2:** [Your second priority]
+
+    **Tenet 3:** [Additional principles as needed]
+
     ## Context
 
     [Any additional context: existing systems, constraints, preferences]
