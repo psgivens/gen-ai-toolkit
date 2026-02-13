@@ -1,0 +1,448 @@
+
+@startuml Workflow SDLC Flow
+
+
+skinparam ActivityBackgroundColor #F5F5F5
+skinparam ActivityBorderColor #333333
+skinparam ActivityFontSize 11
+skinparam ArrowColor #666666
+skinparam NoteBorderColor #999999
+skinparam NoteBackgroundColor #FFFFCC
+skinparam PartitionBackgroundColor #E8F4F8
+skinparam PartitionBorderColor #0066CC
+skinparam PartitionBorderThickness 3
+skinparam PartitionFontSize 14
+skinparam PartitionFontStyle bold
+
+title Structured Development Workflow - SDLC Flow
+
+|User|
+start
+
+partition "**WORKFLOW 1: REQUIREMENTS**" #E8F4F8 {
+  |User|
+  :Invoke requirements workflow;
+  note right
+    execute ~/.workflows/requirements
+  end note
+
+  |Claude|
+  :Create MISSION.md template;
+
+  |User|
+  :Fill out MISSION.md
+  (what to build, problem,
+  success criteria, design tenets);
+
+  |Claude|
+  :Read MISSION.md;
+  :Create REQUIREMENTS_INTERVIEW.md
+  with initial questions (up to 15);
+
+  |User|
+  repeat
+    :Answer questions in interview file;
+    :Ask own questions;
+    :Type 'iterate';
+    |Claude|
+    :Read interview file;
+    :Answer user's questions
+    (with research if needed);
+    :Generate follow-up questions (up to 5);
+    note right
+      **Research Spike Pattern**
+      If information gaps exist,
+      Claude requests specific data
+      instead of more questions
+    end note
+    |User|
+  repeat while (More questions?) is (yes)
+  ->no;
+  :Type 'continue to next phase';
+
+  |Claude|
+  :Generate REQUIREMENTS.md
+  from interview answers;
+
+  |User|
+  repeat
+    :Review REQUIREMENTS.md;
+    if (Changes needed?) then (yes)
+      :Tell Claude specific changes;
+      |Claude|
+      :Update REQUIREMENTS.md;
+    else (no)
+      stop
+    endif
+  repeat while (Satisfied?) is (no)
+  ->yes;
+}
+
+partition "**WORKFLOW 2: DESIGN**" #FFF4E8 {
+  |User|
+  :Invoke design workflow;
+  note right
+    execute ~/.workflows/design
+  end note
+
+  |Claude|
+  :Read REQUIREMENTS.md & MISSION.md;
+  :Check for living ARCHITECTURE.md;
+  :Discover existing patterns
+  (Glob, Grep, Read codebase);
+  :Create EXISTING_PATTERNS.md;
+  :Create DESIGN_INTERVIEW.md
+  with initial questions (up to 15);
+  note right
+    Questions reference:
+    - Existing patterns discovered
+    - Design tenets from MISSION.md
+    - Include confidence levels (✓✓✓/✓✓/✓)
+  end note
+
+  |User|
+  repeat
+    :Answer questions in interview file;
+    :Ask own questions;
+    :Type 'iterate';
+    |Claude|
+    :Read interview file;
+    :Answer user's questions;
+    :Generate follow-up questions (up to 5)
+    with recommendations & confidence levels;
+    |User|
+  repeat while (More questions?) is (yes)
+  ->no;
+  :Type 'continue to next phase';
+
+  |Claude|
+  :Generate DESIGN.md
+  from interview answers;
+
+  |User|
+  repeat
+    :Review DESIGN.md;
+    if (Changes needed?) then (yes)
+      :Tell Claude specific changes;
+      |Claude|
+      :Update DESIGN.md;
+    else (no)
+      stop
+    endif
+  repeat while (Satisfied?) is (no)
+  ->yes;
+
+  |Claude|
+  if (Significant architectural decision?) then (yes)
+    :Prompt: Create ADR?;
+    |User|
+    :Type 'yes' or 'no';
+    |Claude|
+    if (User said yes?) then (yes)
+      :Create docs/adrs/ADR-###-[title].md
+      from ADR_TEMPLATE.md;
+    endif
+  endif
+
+  if (Living ARCHITECTURE.md exists?) then (yes)
+    :Prompt: Update it?;
+    |User|
+    :Type 'yes' or 'later';
+    |Claude|
+    if (User said yes?) then (yes)
+      :Update ARCHITECTURE.md
+      with design decisions;
+    endif
+  else (no)
+    :Prompt: Create it?;
+    |User|
+    :Type 'yes' or 'later';
+    |Claude|
+    if (User said yes?) then (yes)
+      :Create ARCHITECTURE.md
+      from template + patterns;
+    endif
+  endif
+
+  :Announce design phase complete;
+}
+
+partition "**WORKFLOW 3: ARCHITECTURE**" #E8F8E8 {
+  |User|
+  :Invoke architecture workflow;
+  note right
+    execute ~/.workflows/architecture
+  end note
+
+  |Claude|
+  :Read REQUIREMENTS.md, DESIGN.md,
+  MISSION.md, EXISTING_PATTERNS.md;
+  :Generate ARCHITECTURE.md directly
+  (system structure, components,
+  data flows, directory structure);
+  note right
+    **No interview phase**
+    Architecture generated
+    directly from design decisions
+  end note
+
+  |User|
+  repeat
+    :Review ARCHITECTURE.md;
+    if (Changes needed?) then (yes)
+      :Tell Claude specific changes;
+      |Claude|
+      :Update ARCHITECTURE.md;
+    else (no)
+      stop
+    endif
+  repeat while (Satisfied?) is (no)
+  ->yes;
+}
+
+partition "**WORKFLOW 4: PLAN**" #F8E8F8 {
+  |User|
+  :Invoke plan workflow;
+  note right
+    execute ~/.workflows/plan
+  end note
+
+  |Claude|
+  :Read REQUIREMENTS.md, DESIGN.md,
+  ARCHITECTURE.md, MISSION.md;
+  :Generate IMPLEMENTATION_PLAN.md directly
+  (prerequisites, sequential steps,
+  testing approach, deployment);
+  note right
+    **No interview phase**
+    Plan generated directly
+    by breaking down architecture
+    into concrete steps
+  end note
+
+  |User|
+  repeat
+    :Review IMPLEMENTATION_PLAN.md;
+    if (Changes needed?) then (yes)
+      :Tell Claude specific changes
+      (e.g., "Break step 5 into smaller steps");
+      |Claude|
+      :Update IMPLEMENTATION_PLAN.md;
+    else (no)
+      stop
+    endif
+  repeat while (Satisfied?) is (no)
+  ->yes;
+}
+
+partition "**WORKFLOW 5: IMPLEMENT**" #F8F8E8 {
+  |User|
+  :Invoke implement workflow;
+  note right
+    execute ~/.workflows/implement
+  end note
+
+  |Claude|
+  :Read IMPLEMENTATION_PLAN.md,
+  ARCHITECTURE.md;
+
+  repeat
+    :Identify next "Not Started" step;
+    :Explain what about to do;
+    :Execute step
+    (write code, create files);
+    :Update status: "In Progress" → "Complete";
+    :Add notes to status tracking;
+
+    if (Tests failing or blocker?) then (yes)
+      :Mark step "In Progress";
+      :Create/update
+      IMPLEMENTATION_INTERVIEW.md
+      with questions about blocker;
+      |User|
+      :Answer blocker questions;
+      :Type 'iterate';
+      |Claude|
+      :Read answers;
+      :Resolve blocker;
+      :Continue with step;
+    endif
+
+    :Prompt: Step complete;
+    note right
+      Step [N] complete: [summary].
+
+      What would you like to do?
+      - Type 'iterate' to review/refine
+      - Type 'continue' for next step
+    end note
+
+    |User|
+    if (Review needed?) then (yes)
+      :Type 'iterate';
+      :Request changes;
+      |Claude|
+      :Make changes;
+      :Update status notes;
+    else (no)
+      :Type 'continue';
+    endif
+
+  repeat while (More steps?) is (yes)
+  ->no;
+
+  |Claude|
+  :Perform final testing;
+  :Verify all requirements met;
+  :Check code follows architecture;
+  :Prompt: Implementation complete;
+  note right
+    What would you like to do next?
+    - Tell me about issues to fix
+    - Continue to documentation workflow
+  end note
+
+  |User|
+  if (Issues to fix?) then (yes)
+    :Describe issues;
+    |Claude|
+    :Fix issues;
+    :Re-verify;
+  else (no)
+    :Continue to documentation;
+  endif
+}
+
+partition "**WORKFLOW 6: DOCUMENTATION**" #FFE8E8 {
+  |User|
+  :Invoke documentation workflow;
+  note right
+    execute ~/.workflows/documentation
+  end note
+
+  |Claude|
+  :Read REQUIREMENTS.md, IMPLEMENTATION_PLAN.md,
+  ARCHITECTURE.md, source code;
+  :Explore codebase structure;
+  :Identify complex subsystems;
+  :Create DOCUMENTATION_ASSESSMENT.md;
+
+  partition "Phase 1: User Documentation" #FFD0D0 {
+    |Claude|
+    :Create USER_DOCS_PLAN.md
+    (README, guides, API docs);
+
+    repeat
+      :Generate next user doc;
+      |User|
+      :Review document;
+      if (Changes needed?) then (yes)
+        :Request changes;
+        |Claude|
+        :Update document;
+      else (no)
+        :Type 'continue';
+      endif
+    repeat while (More user docs?) is (yes)
+    ->no;
+
+    |Claude|
+    :Announce Phase 1 complete;
+  }
+
+  partition "Phase 2: Codebase Documentation" #FFB0B0 {
+    |Claude|
+    :Create CODEBASE_DOCS_PLAN.md
+    (ARCHITECTURE.md, CLAUDE.md,
+    subsystem guides, directory READMEs);
+
+    :Generate/update ARCHITECTURE.md
+    at project root;
+    |User|
+    :Review & approve;
+    |Claude|
+
+    :Generate docs/CLAUDE.md
+    (build commands, patterns, gotchas);
+    |User|
+    :Review & approve;
+    |Claude|
+
+    repeat
+      :Generate subsystem guide
+      in docs/code/;
+      |User|
+      :Review & approve;
+      |Claude|
+    repeat while (More subsystems?) is (yes)
+    ->no;
+
+    :Generate directory READMEs;
+    |User|
+    :Review & approve;
+    |Claude|
+
+    :Announce Phase 2 complete;
+  }
+
+  |Claude|
+  :Final validation;
+  :List all documentation created;
+  note right
+    **User Documentation:**
+    - README.md
+    - docs/USER_GUIDE.md
+    - docs/API.md
+
+    **Codebase Documentation:**
+    - ARCHITECTURE.md (root)
+    - docs/CLAUDE.md
+    - docs/code/[guides]
+    - Directory READMEs
+
+    **Maintenance reminders:**
+    - Keep ARCHITECTURE.md updated
+    - Add to CLAUDE.md with learnings
+    - Create ADRs for new decisions
+  end note
+}
+
+|User|
+stop
+
+legend right
+  **Workflow Color Coding**
+  |= Workflow |= Color |
+  | Requirements | <#E8F4F8> Light Blue |
+  | Design | <#FFF4E8> Light Orange |
+  | Architecture | <#E8F8E8> Light Green |
+  | Plan | <#F8E8F8> Light Purple |
+  | Implement | <#F8F8E8> Light Yellow |
+  | Documentation | <#FFE8E8> Light Pink |
+
+  **Key Patterns**
+
+  **Iterate Command:**
+  During interviews: Claude answers user's questions + generates follow-up questions
+  During document review: User tells Claude specific changes to make
+
+  **Research Spike:**
+  Claude can pause interview to request specific information/data
+
+  **Review Gates:**
+  Every workflow phase ends with user review and approval
+  User can iterate indefinitely until satisfied
+
+  **No Interview (Architecture & Plan):**
+  These phases generate documents directly from prior phases
+  Still maintain review gates for iteration
+
+  **Documentation Locations:**
+  - User docs: docs/
+  - Codebase docs: docs/code/
+  - Project guidelines: docs/CLAUDE.md
+  - ADRs: docs/adrs/
+  - Living architecture: ARCHITECTURE.md (root)
+endlegend
+
+@enduml

@@ -1,0 +1,50 @@
+Implement workflow improvements and codebase documentation standards
+
+Major additions:
+- Add documentation workflow creating both user and codebase docs
+- Add templates: ADR, ARCHITECTURE, CLAUDE_PROJECT (for docs/CLAUDE.md)
+- Add documentation philosophy and standards to README and PATTERNS
+
+Design workflow enhancements:
+- Discover existing patterns before asking questions (EXISTING_PATTERNS.md)
+- Reference design tenets from MISSION.md in recommendations
+- Add confidence levels (✓✓✓/✓✓/✓) to all recommendations
+- Prompt for ADRs after significant architectural decisions
+- Update/create living ARCHITECTURE.md at project root
+
+Architecture & plan workflows:
+- Remove interview phases, generate documents directly
+- Architecture reads requirements/design/tenets, creates ARCHITECTURE.md
+- Plan reads architecture, breaks into implementation steps
+- Both workflows maintain review gates for iteration
+
+Requirements workflow:
+- Add design tenets section to MISSION.md template
+- Tenets guide design trade-offs (e.g., "Robustness over performance")
+
+PATTERNS.md additions:
+- Clarify 'iterate' command meaning (explicit instructions)
+- Add research spike pattern for pausing interviews
+- Add documentation standards (what to document, what to avoid)
+- Update document review prompts (conversational, not command-based)
+
+Templates created:
+- ADR_TEMPLATE.md: Architecture Decision Records in docs/adrs/
+- ARCHITECTURE_TEMPLATE.md: Living architecture doc with entry points
+- CLAUDE_PROJECT_TEMPLATE.md: Project guidelines for docs/CLAUDE.md
+
+Documentation locations standardized:
+- User docs: docs/
+- Codebase docs: docs/code/
+- Project guidelines: docs/CLAUDE.md
+- ADRs: docs/adrs/
+- Living architecture: ARCHITECTURE.md (at root)
+
+Backlog updates:
+- Defer roadmap/backlog workflow to v1.5
+- Defer scope breakdown recommendations to v1.5
+- Defer testing guidance (Ralph Wiggum Loop) to v1.5
+
+Based on principles from claude/CLAUDE_PREP.md for efficient codebase navigation.
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
