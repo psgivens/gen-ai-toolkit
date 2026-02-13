@@ -1,8 +1,13 @@
 # Building process with AI
 
 This document contains the 'steps' I use when building with claude code.
-There are steps that I repeat (Steps 2 and 5 are designed for iteration). 
+There are steps that I repeat (Steps 2 and 5 are designed for iteration).
 
+## About the Workflow
+
+**Conversational approach:** Most steps execute in the main conversation to maintain context and enable natural back-and-forth discussion. This conversational flow is a key benefit of the naive approach—Claude remembers what you discussed and can ask clarifying questions as you progress.
+
+**When to use subagents:** Only Step 8 (Review the plan) uses a subagent. This is intentional—validation benefits from a "fresh eyes" perspective, while all other steps benefit from maintaining conversational context.
 
 ## Building the scripts. 
 
@@ -67,7 +72,9 @@ Prompt (execute in a subagent):
 > Read IMPLEMENTATION_PLAN.md, REQUIREMENTS.md, DECISIONS.md, and DESIGN.md.
 > Create PLAN_ANALYSIS.md which evaluates whether the implementation plan will
 > achieve what is set out in the requirements and honor the decisions made.
-> Identify any gaps, risks, or missing steps. 
+> Identify any gaps, risks, or missing steps.
+
+**Note:** This is the only step that uses a subagent. Why? Independent validation benefits from a fresh perspective without prior conversation context. The subagent acts as an independent reviewer, more likely to catch gaps or inconsistencies. All other steps maintain conversational context to enable natural iteration and clarification.
 
 Step 9. Update the plan
 Prompt:

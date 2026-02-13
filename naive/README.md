@@ -60,6 +60,23 @@ Between each step, you review the generated documents and can:
 
 This human-in-the-loop approach keeps you in control while leveraging Claude's capabilities.
 
+### Conversational Flow and Subagents
+
+The naive approach intentionally maintains a **continuous conversation** for most steps. This conversational flow is one of the workflow's key benefits—Claude retains context from previous steps, enabling natural back-and-forth discussion and iteration.
+
+**Why most steps stay in the main conversation:**
+- Enables quick clarifications and follow-up questions
+- Maintains context across related steps
+- Supports iterative refinement (especially Steps 2 and 5)
+- Feels collaborative rather than mechanical
+
+**Why Step 8 uses a subagent:**
+- **Fresh perspective** - Validation benefits from "fresh eyes" without prior conversation bias
+- **Independent review** - Acts as an objective reviewer more likely to catch gaps
+- **No iteration needed** - Produces a single analysis document, doesn't require back-and-forth
+
+This selective use of subagents balances the benefits of conversational flow with the value of independent validation.
+
 ### Visual Workflow
 
 For a detailed visual representation of how these steps flow together, including the iterative loops and document dependencies, see [WORKFLOW.md](./WORKFLOW.md).

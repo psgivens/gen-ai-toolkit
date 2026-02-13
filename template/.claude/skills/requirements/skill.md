@@ -1,7 +1,7 @@
 # Requirements Discovery
 
 ## Description
-Guide the user through requirements discovery by asking clarifying questions about what they want to build.
+Guide the user through requirements discovery using an interview-based approach with bidirectional Q&A to understand what they want to build.
 
 ## Trigger
 When user invokes `execute .claude/skills/requirements` or says "start requirements discovery"
@@ -9,6 +9,8 @@ When user invokes `execute .claude/skills/requirements` or says "start requireme
 ## Instructions
 
 You are guiding the user through Phase 1: Requirements Discovery of a structured development workflow.
+
+**Follow the Interview Pattern** defined in `.claude/CLAUDE.md` for conducting the requirements interview.
 
 ### Step 0: Determine Task Folder
 - If you already know the current task folder from this session, use it and skip to creating MISSION.md
@@ -59,8 +61,10 @@ Template:
 - Read `claude/${TASK_FOLDER}/MISSION.md` to understand the project goal
 - If MISSION.md doesn't exist or is empty, ask the user to describe their goal and offer to create it for them
 
-### Step 3: Initial Questions
-- Create `claude/${TASK_FOLDER}/GATHER_REQUIREMENTS.md` with 8-10 clarifying questions
+### Step 3: Create Requirements Interview
+- Create `claude/${TASK_FOLDER}/REQUIREMENTS_INTERVIEW.md` following the Interview Pattern structure
+- Start with "## Interview Round 1"
+- Provide **up to 15 questions** focused on understanding requirements
 - Focus on WHAT (requirements, outcomes), not HOW (implementation)
 - Ask about:
   - Desired outcomes and success criteria
@@ -68,48 +72,73 @@ Template:
   - Edge cases and error handling
   - User scenarios and workflows
   - Constraints and limitations
-- Leave space after each question for user answers
+  - Data formats and structure
+  - Integration points and dependencies
+  - Non-functional requirements (performance, security)
+- Each question should include:
+  - **Your Answer:** [Space for user]
+  - **Your Questions for Claude:** [Space for user to ask questions back]
+  - Separator `---` between questions
 
 ### Step 4: Review Gate
-- Explicitly prompt: "I've created claude/${TASK_FOLDER}/GATHER_REQUIREMENTS.md with initial questions. Please review and add your answers in the spaces provided between each question.
+- Explicitly prompt: "I've created claude/${TASK_FOLDER}/REQUIREMENTS_INTERVIEW.md with initial questions about your requirements. Please:
+  1. Answer the questions in the 'Your Answer' sections
+  2. Ask any questions you have in the 'Your Questions for Claude' sections
+  3. Type 'iterate' when ready for me to respond
 
 What would you like to do?
-- Type 'iterate' to review and refine further
-- Type 'continue' to proceed with follow-up questions"
+- Type 'iterate' to continue the interview (I'll answer your questions and ask follow-ups)
+- Type 'continue to next phase' to finalize requirements and move to design"
 - Wait for user response
 
-### Step 5: Follow-Up Questions
-- Read the user's answers
-- Add a new section to GATHER_REQUIREMENTS.md with up to 5 follow-up questions
-- Prompt: "Based on your answers, I have [N] follow-up questions. I've added them to claude/${TASK_FOLDER}/GATHER_REQUIREMENTS.md.
+### Step 5: Interview Iteration (When user types 'iterate')
+- Read `claude/${TASK_FOLDER}/REQUIREMENTS_INTERVIEW.md` to extract:
+  - User's answers
+  - User's questions for Claude
+- If user asked questions:
+  - Research as needed (read codebase, check documentation, investigate context)
+  - Add section "## Claude's Responses (Round N)" with detailed answers to each question
+- Based on user's answers, add "## Interview Round N+1" with **up to 5 follow-up questions**:
+  - Dig deeper into unclear requirements
+  - Clarify contradictions or ambiguities
+  - Explore edge cases mentioned by user
+  - Validate assumptions
+  - Ask about areas not yet covered
+- Each follow-up question includes the same structure (Your Answer / Your Questions for Claude / separator)
+- Prompt: "I've updated claude/${TASK_FOLDER}/REQUIREMENTS_INTERVIEW.md with:
+  - Responses to your questions
+  - [N] follow-up questions based on your answers
 
 What would you like to do?
-- Type 'iterate' to review and refine the questions
-- Type 'continue' to answer and proceed"
+- Type 'iterate' to continue the interview
+- Type 'continue to next phase' to finalize requirements"
 - Wait for user response
+- If user types 'iterate' again, repeat this step
 
-### Step 6: Generate Requirements
-- Read all answers from GATHER_REQUIREMENTS.md
+### Step 6: Generate Requirements (When user types 'continue to next phase')
+- Read all answers from `claude/${TASK_FOLDER}/REQUIREMENTS_INTERVIEW.md`
 - Create `claude/${TASK_FOLDER}/REQUIREMENTS.md` with:
-  - Overview
-  - Functional requirements (numbered list)
-  - Non-functional requirements (performance, security, etc.)
-  - Constraints
+  - Overview (summarize what we're building based on interview)
+  - Functional requirements (numbered list of specific features/capabilities)
+  - Non-functional requirements (performance, security, scalability, etc.)
+  - Constraints (technical, business, or resource limitations)
   - Out of scope (explicitly state what we're NOT doing)
-- Prompt: "I've generated claude/${TASK_FOLDER}/REQUIREMENTS.md based on our discussion.
+- Prompt: "I've generated claude/${TASK_FOLDER}/REQUIREMENTS.md based on our interview.
 
 What would you like to do?
-- Type 'iterate' to review and refine further
-- Type 'continue' to finalize requirements"
+- Type 'iterate' to review and refine the requirements document
+- Type 'continue to next phase' to move to design decisions"
 
-### Step 7: Iterate on Feedback
-- If user provides feedback, update REQUIREMENTS.md
+### Step 7: Finalize Requirements
+- If user types 'iterate', read their feedback and update REQUIREMENTS.md
 - Continue iterating until user approves
-- When approved, say: "Requirements phase complete! Use `execute .claude/skills/decisions` to begin design decisions."
+- When user types 'continue to next phase', say: "Requirements phase complete! Use `execute .claude/skills/design` to begin design decisions."
 
 ## Best Practices
-- Keep questions focused on requirements, not implementation
+- Keep questions focused on requirements (WHAT), not implementation (HOW)
 - Use clear, concise language
-- Maintain the review gate pattern (create → prompt → wait → iterate)
-- Acknowledge user edits explicitly
+- Maintain the interview pattern (create interview → user answers + asks questions → Claude responds + follow-up questions → repeat)
+- When user asks questions, research thoroughly before responding
+- Acknowledge user answers and questions explicitly
+- Generate follow-up questions that build on previous answers
 - Stay in a continuous conversation throughout this phase

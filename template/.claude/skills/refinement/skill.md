@@ -1,7 +1,7 @@
 # Project Refinement
 
 ## Description
-Guide the user through making refinements to the current project such as refactoring, reorganizing code, global renaming, or cleanup activities.
+Guide the user through making refinements to the current project using an interview-based approach to understand refactoring goals, risks, and constraints.
 
 ## Trigger
 When user invokes `execute .claude/skills/refinement` or says "refine this project", "do some cleanup", "refactor the code", or "reorganize the project"
@@ -9,6 +9,8 @@ When user invokes `execute .claude/skills/refinement` or says "refine this proje
 ## Instructions
 
 You are guiding the user through a structured refinement workflow to improve code quality, organization, or structure.
+
+**Follow the Interview Pattern** defined in `.claude/CLAUDE.md` for conducting the refinement interview.
 
 ### Step 0: Determine Task Folder
 - If you already know the current task folder from this session, use it and skip to creating refinement template
@@ -68,39 +70,65 @@ Template:
 
     **Next Step**: Once you've filled this out, tell Claude you're ready to proceed.
 
-### Step 2: Initial Clarification Questions
+### Step 2: Create Refinement Interview
 - Read `claude/${TASK_FOLDER}/REFINEMENT.md` to understand the refinement goals
-- Create `claude/${TASK_FOLDER}/REFINEMENT_QUESTIONS.md` with 5 clarifying questions
+- Create `claude/${TASK_FOLDER}/REFINEMENT_INTERVIEW.md` following the Interview Pattern structure
+- Start with "## Interview Round 1"
+- Provide **up to 15 questions** focused on understanding the refactoring
 - Focus on understanding:
   - Scope and boundaries of the refactoring
+  - Current pain points and desired improvements
   - Risks and dependencies
-  - Testing strategy
-  - Success criteria
+  - Testing strategy (existing tests, new tests needed)
+  - Success criteria (what defines "done"?)
   - Breaking changes tolerance
-- Leave space after each question for user answers
+  - Backwards compatibility requirements
+  - Migration path if needed
+  - Rollback strategy
+  - Timeline and urgency
+  - Files and modules affected
+- Each question should include:
+  - **Your Answer:** [Space for user]
+  - **Your Questions for Claude:** [Space for user to ask questions back]
+  - Separator `---` between questions
 
 ### Step 3: Review Gate
-- Explicitly prompt: "I've created claude/${TASK_FOLDER}/REFINEMENT_QUESTIONS.md with initial questions to clarify your refinement goals. Please review and add your answers in the spaces provided.
+- Explicitly prompt: "I've created claude/${TASK_FOLDER}/REFINEMENT_INTERVIEW.md with questions about your refactoring goals. Please:
+  1. Answer the questions in the 'Your Answer' sections
+  2. Ask any questions you have in the 'Your Questions for Claude' sections
+  3. Type 'iterate' when ready for me to respond
 
 What would you like to do?
-- Type 'iterate' to provide follow-up questions
-- Type 'continue' to proceed to create a refinement plan"
+- Type 'iterate' to continue the interview (I'll answer your questions and ask follow-ups)
+- Type 'continue to next phase' to create the refinement plan"
 - Wait for user response
 
-### Step 4: Follow-Up Questions (Iterative)
-- Read the user's answers from REFINEMENT_QUESTIONS.md
-- Add a new section with up to 5 follow-up questions based on their answers
-- Prompt: "Based on your answers, I have [N] follow-up questions. I've added them to claude/${TASK_FOLDER}/REFINEMENT_QUESTIONS.md.
+### Step 4: Interview Iteration (When user types 'iterate')
+- Read `claude/${TASK_FOLDER}/REFINEMENT_INTERVIEW.md` to extract:
+  - User's answers about refactoring goals
+  - User's questions for Claude
+- If user asked questions:
+  - Research as needed (explore codebase, check dependencies, review existing patterns)
+  - Add section "## Claude's Responses (Round N)" with detailed answers to each question
+  - Provide code examples, refactoring patterns, or risk analysis if helpful
+- Based on user's answers, add "## Interview Round N+1" with **up to 5 follow-up questions**:
+  - Dig deeper into scope and boundaries
+  - Clarify testing and validation approach
+  - Explore risk mitigation strategies
+  - Address rollback or migration concerns
+  - Ask about areas not yet covered
+- Prompt: "I've updated claude/${TASK_FOLDER}/REFINEMENT_INTERVIEW.md with:
+  - Responses to your questions
+  - [N] follow-up questions based on your refactoring goals
 
 What would you like to do?
-- Type 'iterate' to continue answering questions
-- Type 'ready for plan' to proceed with creating the execution plan"
+- Type 'iterate' to continue the interview
+- Type 'continue to next phase' to create the refinement plan"
 - Wait for user response
-- If user types 'iterate', repeat this step with more follow-up questions
-- If user types 'ready for plan', proceed to Step 5
+- If user types 'iterate' again, repeat this step
 
-### Step 5: Create Refinement Plan
-- Read all answers from REFINEMENT_QUESTIONS.md
+### Step 5: Create Refinement Plan (When user types 'continue to next phase')
+- Read all answers from `claude/${TASK_FOLDER}/REFINEMENT_INTERVIEW.md`
 - Read the current codebase to understand what needs to change
 - Create `claude/${TASK_FOLDER}/REFINEMENT_PLAN.md` with:
   - **Overview**: Summary of the refinement
@@ -180,4 +208,7 @@ What would you like to do?
 - If a step breaks something, stop and fix it before proceeding
 - Maintain the review gate pattern throughout
 - Be explicit about breaking vs. non-breaking changes
-- Consider backwards compatibility and migration paths 
+- Consider backwards compatibility and migration paths
+- Use the interview pattern (create interview → user answers + asks questions → Claude responds + follow-up questions → repeat)
+- When user asks questions, research the codebase thoroughly before responding
+- Generate follow-up questions that explore risks and mitigation strategies 

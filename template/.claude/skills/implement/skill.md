@@ -1,7 +1,7 @@
 # Execute Implementation
 
 ## Description
-Execute the implementation plan step by step, updating status tracking as progress is made.
+Execute the implementation plan step by step, using an interview-based approach for addressing blockers and questions during execution.
 
 ## Trigger
 When user invokes `execute .claude/skills/implement` or says "execute the plan" or "start implementation"
@@ -9,6 +9,8 @@ When user invokes `execute .claude/skills/implement` or says "execute the plan" 
 ## Instructions
 
 You are guiding the user through Phase 5: Execute Implementation of a structured development workflow.
+
+**Follow the Interview Pattern** defined in `.claude/CLAUDE.md` when addressing blockers or questions during implementation.
 
 ### Step 0: Determine Task Folder
 - If you already know the current task folder from this session, use it and skip to reading the plan
@@ -23,14 +25,14 @@ You are guiding the user through Phase 5: Execute Implementation of a structured
 
 ### Step 1: Read the Plan
 - Read `claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md` to understand all steps
-- Read `claude/${TASK_FOLDER}/DESIGN.md` for architectural guidance
+- Read `claude/${TASK_FOLDER}/ARCHITECTURE.md` for architectural guidance
 - Verify you understand the full scope before starting
 
 ### Step 2: Begin Execution
 - Start with the first step marked "Not Started"
 - Before implementing, explain what you're about to do
 - Execute the step (write code, create files, etc.)
-- Follow the architecture and patterns defined in DESIGN.md
+- Follow the architecture and patterns defined in ARCHITECTURE.md
 
 ### Step 3: Update Status Tracking
 - After completing each step, immediately update the status tracking table in `claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md`
@@ -46,12 +48,15 @@ What would you like to do?
 - Wait for user response
 - If user chooses iterate, make changes and update status notes
 
-### Step 5: Handle Issues
+### Step 5: Handle Issues and Blockers
 - If you encounter problems during implementation:
   - Mark the step as "In Progress" with notes about the issue
-  - Explain the problem to the user
-  - Propose solutions
+  - Create or update `claude/${TASK_FOLDER}/IMPLEMENTATION_INTERVIEW.md` using the Interview Pattern:
+    - Ask questions about the blocker (e.g., "How should we handle [specific issue]?")
+    - Propose 2-3 solutions with trade-offs
+    - Leave space for user's answer and their questions
   - Wait for user guidance
+  - When user responds with "iterate", answer their questions and ask follow-ups if needed
 - Don't skip steps or mark them complete if they have issues
 
 ### Step 6: Test as You Go
@@ -69,7 +74,7 @@ What would you like to do?
 ### Step 8: Final Verification
 - When all steps are complete, perform final testing
 - Verify all requirements from `claude/${TASK_FOLDER}/REQUIREMENTS.md` are met
-- Check code follows architecture from `claude/${TASK_FOLDER}/DESIGN.md`
+- Check code follows architecture from `claude/${TASK_FOLDER}/ARCHITECTURE.md`
 - Prompt: "Implementation complete! All steps in claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md are done.
 
 What would you like to do?
@@ -79,10 +84,12 @@ What would you like to do?
 ## Best Practices
 - Update status tracking immediately after each step (don't batch updates)
 - Be honest about issues or blockers (don't mark things complete if they're not)
-- Follow the architecture and patterns defined in earlier phases
+- Follow the architecture and patterns defined in ARCHITECTURE.md
 - Write clean, maintainable code that follows project standards
 - Test thoroughly as you go
 - If you discover requirements issues during implementation, note them
 - Keep the user informed of progress
-- Don't add scope or features beyond what's in `claude/${TASK_FOLDER}/REQUIREMENTS.md`
+- Don't add scope or features beyond what's in REQUIREMENTS.md
 - If you need to deviate from the plan, explain why and get approval
+- Use the interview pattern (IMPLEMENTATION_INTERVIEW.md) to address blockers collaboratively
+- When creating interview questions for blockers, provide recommendations and alternatives
