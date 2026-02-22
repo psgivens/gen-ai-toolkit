@@ -274,73 +274,15 @@ When generating DESIGN.md, follow this structure:
 - Error handling strategy
 - Trade-offs made (briefly explain why certain choices were made)
 
-### Step 3: Update Living Architecture Document
+### Step 3: Complete Design Phase
 
 After generating and finalizing DESIGN.md:
 
-1. **Check if project has living architecture doc:**
-   - Look for `ARCHITECTURE.md` or `docs/ARCHITECTURE.md` at project root
-   - Read it if it exists
-
-2. **If living architecture doc exists:**
-
-   Analyze what needs updating based on this design phase:
-   - New technology choices
-   - New patterns established
-   - New design principles
-   - Architectural decisions made
-
-   Prompt:
-   ```
-   This project has a living architecture document at [path]. Based on this design phase,
-   I recommend updating it with:
-
-   - [List specific additions/changes needed]
-   - [e.g., "Add FastAPI to Backend Framework section"]
-   - [e.g., "Add Decision Log entry for choosing REST over GraphQL"]
-
-   Would you like me to update the architecture document?
-   - Type 'yes' to update it now
-   - Type 'later' to skip for now
-   ```
-
-   If user says yes:
-   - Make the updates to ARCHITECTURE.md
-   - Add decision log entry if significant architectural decision was made
-   - Confirm what was updated
-
-3. **If living architecture doc doesn't exist:**
-
-   Prompt:
-   ```
-   This project doesn't have a living architecture document yet. I recommend creating one
-   to capture patterns and decisions for future features.
-
-   Benefits:
-   - Future design phases will reference it for consistency
-   - New team members can understand architectural decisions
-   - Prevents pattern drift across features
-
-   Would you like me to create ARCHITECTURE.md based on:
-   - Existing codebase patterns discovered in EXISTING_PATTERNS.md
-   - Design decisions from this feature
-
-   - Type 'yes' to create it now
-   - Type 'later' to skip for now
-   ```
-
-   If user says yes:
-   - Use template from `templates/ARCHITECTURE_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/ARCHITECTURE_TEMPLATE.md` if using URL access)
-   - Fill in sections based on EXISTING_PATTERNS.md and DESIGN.md
-   - Create `ARCHITECTURE.md` at project root
-   - Add decision log entry for major design decisions
-
-4. **Confirm completion:**
-   ```
-   [If updated/created]: I've [updated/created] ARCHITECTURE.md with [summary of changes].
-
-   Design phase complete! Continue to the architecture workflow to create the detailed architecture.
-   ```
+```
+Design phase complete! Continue to the architecture workflow to translate
+these decisions into a concrete system blueprint (directory structure,
+component interfaces, data flows, and implementation patterns).
+```
 
 ### Step 3b: Create ADR for Significant Decisions
 

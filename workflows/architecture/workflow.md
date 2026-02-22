@@ -44,6 +44,17 @@ Follow this structure when generating ARCHITECTURE.md:
 [High-level description of system architecture - 2-3 paragraphs explaining
 the overall approach, how components work together, and key architectural patterns]
 
+## Entry Points
+
+[Where execution begins — the fastest way to orient yourself or Claude in this codebase]
+
+- `[file path]` — [What starts here, e.g., "Application startup, initializes all services"]
+- `[file path]` — [e.g., "HTTP server, middleware registration"]
+- `[file path]` — [e.g., "Background job processor, queue listener"]
+- `[file path]` — [e.g., "CLI entrypoint"]
+
+[Include only files where something meaningfully begins — not every file in the project]
+
 ## Key Components
 
 ### Component 1: [Name]
@@ -91,6 +102,44 @@ project-root/
 ```
 
 **Rationale:** [Explain why this structure - separation of concerns, scalability, etc.]
+
+## Common Operations
+
+[How to perform the most frequent development tasks in this codebase.
+Derive these from the directory structure and component definitions above.]
+
+### Adding a new [primary resource type, e.g., "API endpoint"]
+1. [Step with specific file path, e.g., "Create route in `src/api/routes/[resource].ts`"]
+2. [Step with specific file path]
+3. [Step with specific file path]
+4. [Step with specific file path, e.g., "Register route in `src/api/server.ts`"]
+
+### Adding a new [secondary resource type, e.g., "database model"]
+1. [Step with specific file path]
+2. [Step with specific file path]
+3. [Step with specific file path]
+
+### [Other common operation derived from requirements, e.g., "Adding a background job"]
+1. [Step with specific file path]
+2. [Step with specific file path]
+
+[Include 2-4 operations covering the most common development tasks for this system]
+
+## Anti-Patterns
+
+[What NOT to do in this codebase — derived from design tenets, component boundaries,
+and the layered architecture defined above]
+
+- **Don't [anti-pattern]** — [Why: what goes wrong, what to do instead]
+- **Don't [anti-pattern]** — [Why: what goes wrong, what to do instead]
+- **Don't [anti-pattern]** — [Why: what goes wrong, what to do instead]
+
+Examples:
+- "Don't put business logic in controllers — use the service layer"
+- "Don't query the database from the API layer directly — always go through repositories"
+- "Don't share mutable state across request handlers — treat each request as isolated"
+
+[Derive from design tenets in MISSION.md and from component boundary definitions above]
 
 ## Module Dependencies
 
@@ -143,6 +192,16 @@ project-root/
 [Key architectural trade-offs made and why]
 - **Trade-off 1:** [What was chosen vs. alternative, why]
 - **Trade-off 2:** [What was chosen vs. alternative, why]
+
+## Key Decisions
+
+[Reference to significant architectural decisions documented as ADRs.
+If no ADRs exist yet, omit this section.]
+
+| Decision | Rationale | ADR |
+|----------|-----------|-----|
+| [e.g., PostgreSQL over MongoDB] | [e.g., Relational model required for referential integrity] | [ADR-001](docs/adrs/ADR-001-database.md) |
+| [e.g., REST over GraphQL] | [e.g., Simpler client integration, caching benefits] | [ADR-002](docs/adrs/ADR-002-api-style.md) |
 ```
 
 #### Generation Guidelines
@@ -150,11 +209,15 @@ project-root/
 When creating ARCHITECTURE.md:
 1. **Be specific** - Use actual technology names and versions from DESIGN.md
 2. **Reference requirements** - Ensure all functional requirements have architectural support
-3. **Apply design tenets** - If tenets exist in MISSION.md, reference them in trade-offs
+3. **Apply design tenets** - If tenets exist in MISSION.md, reference them in trade-offs and anti-patterns
 4. **Follow existing patterns** - If EXISTING_PATTERNS.md exists, maintain consistency
 5. **Explain decisions** - Don't just state what, explain why
 6. **Be implementation-ready** - Directory structure and component definitions should be clear enough to start coding
 7. **Include diagrams** - Use ASCII art or markdown for data flows and dependencies if helpful
+8. **Entry Points** - Identify every file where meaningful execution begins; use actual paths from the directory structure defined above
+9. **Common Operations** - Derive 2-4 step-by-step guides from the component layers and directory structure; use actual file paths; focus on the tasks a developer will perform most often
+10. **Anti-patterns** - Derive from design tenets (MISSION.md) and component boundary definitions; each anti-pattern should name a specific wrong thing to do and explain what breaks
+11. **Key Decisions** - Only include if ADRs exist in docs/adrs/; link to the actual ADR files
 
 ### Step 3: Validation
 
@@ -164,6 +227,10 @@ After generating ARCHITECTURE.md, validate it:
 - Directory structure is practical and follows conventions
 - Component responsibilities are clear and well-defined
 - No circular dependencies between components
+- Entry points are real files (not abstractions) with specific paths
+- Common Operations use actual file paths from the directory structure
+- Anti-patterns are specific (name the wrong thing) not generic advice
+- Key Decisions section only present if ADRs actually exist
 
 ### Step 4: Prompt for Review
 
