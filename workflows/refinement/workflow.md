@@ -10,7 +10,7 @@ When user invokes this workflow (e.g., `execute ~/.workflows/refinement`) or say
 
 You are guiding the user through a structured refinement workflow to improve code quality, organization, or structure.
 
-**Follow the Interview Pattern** defined in `PATTERNS.md` (in the same directory as this workflow) for conducting the refinement interview.
+**Follow the Interview Pattern** defined in `PATTERNS.md` at the workflows root (fetch from `$WORKFLOWS/PATTERNS.md` if using URL access) for conducting the refinement interview.
 
 ### Step 0: Determine Task Folder
 **Follow Task Folder Management Pattern** to establish task folder
@@ -99,7 +99,7 @@ When generating REFINEMENT_PLAN.md, follow this structure:
     - Files that will be modified
     - Expected impact (breaking/non-breaking)
     - Testing approach for that step
-- **Status Tracking**: Table showing progress (see Status Tracking Convention in PATTERNS.md)
+- **Status Tracking**: Table showing progress (see Status Tracking Convention in `PATTERNS.md` at the workflows root)
   ```
   | Step | Status | Notes |
   |------|--------|-------|

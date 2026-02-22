@@ -10,7 +10,7 @@ When user invokes this workflow (e.g., `execute ~/.workflows/implement`) or says
 
 You are guiding the user through Phase 5: Execute Implementation of a structured development workflow.
 
-**Follow the Interview Pattern** defined in `PATTERNS.md` (in the same directory as this workflow) when addressing blockers or questions during implementation.
+**Follow the Interview Pattern** defined in `PATTERNS.md` at the workflows root (fetch from `$WORKFLOWS/PATTERNS.md` if using URL access) when addressing blockers or questions during implementation.
 
 ### Step 0: Determine Task Folder
 **Follow Task Folder Management Pattern** to establish task folder

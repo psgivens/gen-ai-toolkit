@@ -10,7 +10,7 @@ When user invokes this workflow (e.g., `execute ~/.workflows/requirements`) or s
 
 You are guiding the user through Phase 1: Requirements Discovery of a structured development workflow.
 
-**Follow the Interview Pattern** defined in `PATTERNS.md` (in the same directory as this workflow) for conducting the requirements interview.
+**Follow the Interview Pattern** defined in `PATTERNS.md` at the workflows root (fetch from `$WORKFLOWS/PATTERNS.md` if using URL access) for conducting the requirements interview.
 
 ### Step 0: Determine Task Folder
 **Follow Task Folder Management Pattern** to establish task folder

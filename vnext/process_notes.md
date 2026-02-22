@@ -1,3 +1,32 @@
+# Process Notes
+
+## ARCHITECTURE.md shouldn't be at the root. 
+
+We need to move the ARCHITECTURE.md documentation to under docs. All the workflows need to expect it here. 
+
+## Reconsider ./workflows/architecture
+
+Does this add any value? What value does the 'architecture' document add over the 'design' document? 
+
+
+## ~/.workflows/documentation wants a working folder
+
+When I tried to run this workflow in a new session, it wanted to create 2026-02-15-documentation. I'll need to review this workflow to understand why. 
+
+## Status tracking not working
+
+I can see that claude is on step 14 of a 16 step plan, but when I read the plan, the status tracking table shows that it has only comlpeted two steps. The rest are 'Not Started'. 
+
+I ran `execute ~/.workflows/implement` a second time. It recognized that the steps are done, but it still didn't update the doc. 
+
+
+---
+
+## Should have been remediated
+
+**Note:** These should have been addressed, but they have not been verified. 
+
+
 Here are some notes. 
 
 

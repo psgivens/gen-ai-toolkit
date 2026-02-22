@@ -10,7 +10,7 @@ When user invokes this workflow (e.g., `execute ~/.workflows/design`) or says "s
 
 You are guiding the user through Phase 2: Design Decisions of a structured development workflow.
 
-**Follow the Interview Pattern** defined in `PATTERNS.md` (in the same directory as this workflow) for conducting the design interview.
+**Follow the Interview Pattern** defined in `PATTERNS.md` at the workflows root (fetch from `$WORKFLOWS/PATTERNS.md` if using URL access) for conducting the design interview.
 
 ### Step 0: Determine Task Folder
 **Follow Task Folder Management Pattern** to establish task folder
@@ -330,7 +330,7 @@ After generating and finalizing DESIGN.md:
    ```
 
    If user says yes:
-   - Use template from `workflows/templates/ARCHITECTURE_TEMPLATE.md`
+   - Use template from `templates/ARCHITECTURE_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/ARCHITECTURE_TEMPLATE.md` if using URL access)
    - Fill in sections based on EXISTING_PATTERNS.md and DESIGN.md
    - Create `ARCHITECTURE.md` at project root
    - Add decision log entry for major design decisions
@@ -400,7 +400,7 @@ If this design phase involved a **significant architectural decision**, create a
       - Use next number (e.g., ADR-004)
 
    b. **Create ADR for each significant decision:**
-      - Use template from `workflows/templates/ADR_TEMPLATE.md`
+      - Use template from `templates/ADR_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/ADR_TEMPLATE.md` if using URL access)
       - Fill in based on DESIGN_INTERVIEW.md conversation:
         * **Context:** Why this decision was needed
         * **Decision:** What was chosen

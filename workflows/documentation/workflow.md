@@ -247,7 +247,7 @@ Based on CLAUDE_PREP.md principles: Focus on high-value navigation docs, avoid o
 **Location:** Project root (`ARCHITECTURE.md`)
 **Status:** [Create/Update]
 **Purpose:** Single source of truth for system design and patterns
-**Template:** workflows/templates/ARCHITECTURE_TEMPLATE.md
+**Template:** `templates/ARCHITECTURE_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/ARCHITECTURE_TEMPLATE.md` if using URL access)
 **Key sections:**
 - Directory structure with descriptions
 - Entry points
@@ -262,7 +262,7 @@ Based on CLAUDE_PREP.md principles: Focus on high-value navigation docs, avoid o
 **Location:** docs/CLAUDE.md
 **Status:** [Create/Update]
 **Purpose:** Project-specific development guidelines
-**Template:** workflows/templates/CLAUDE_PROJECT_TEMPLATE.md
+**Template:** `templates/CLAUDE_PROJECT_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/CLAUDE_PROJECT_TEMPLATE.md` if using URL access)
 **Key sections:**
 - Build/test commands (actual working commands)
 - Key patterns specific to this codebase
@@ -330,7 +330,7 @@ Following CLAUDE_PREP.md recommendations:
 
 If ARCHITECTURE.md doesn't exist or needs updating:
 
-1. **Use template:** `workflows/templates/ARCHITECTURE_TEMPLATE.md`
+1. **Use template:** `templates/ARCHITECTURE_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/ARCHITECTURE_TEMPLATE.md` if using URL access)
 
 2. **Explore codebase:**
    - Use Glob to map directory structure
@@ -374,7 +374,7 @@ Create project-specific development guidelines:
 
 1. **Create docs/ directory if needed**
 
-2. **Use template:** `workflows/templates/CLAUDE_PROJECT_TEMPLATE.md`
+2. **Use template:** `templates/CLAUDE_PROJECT_TEMPLATE.md` at the workflows root (fetch from `$WORKFLOWS/templates/CLAUDE_PROJECT_TEMPLATE.md` if using URL access)
 
 3. **Fill in based on codebase:**
    - **Build & Test Commands:** Find actual commands from package.json, Makefile, etc.
