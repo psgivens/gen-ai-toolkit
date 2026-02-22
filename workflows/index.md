@@ -2,14 +2,61 @@
 
 Interview-based workflows for structured software development with Claude Code.
 
-## For Claude: Executing Workflows from a URL
+## For Claude: Executing Workflows
 
-When a user says `execute [workflow] from $WORKFLOWS` where `$WORKFLOWS` is a URL:
+The invocation syntax is:
 
-1. **Fetch the workflow file:** `$WORKFLOWS/[workflow-name]/workflow.md`
-2. **Fetch PATTERNS.md when referenced:** `$WORKFLOWS/PATTERNS.md`
-3. **Fetch templates when referenced:** `$WORKFLOWS/templates/[filename]`
-4. **All artifact creation is local:** Task folders, interview files, and output documents are created in the current working directory — not at the URL
+```
+execute [workflow] in [location]
+```
+
+Examples:
+- `execute plan in ~/.workflows`
+- `execute plan in $WORKFLOWS`
+- `execute refinement in https://example.com/workflows/index.md`
+
+### Step 1: Resolve the Location
+
+If `[location]` looks like a shell variable (e.g., `$WORKFLOWS`), resolve it first:
+
+```bash
+echo $WORKFLOWS
+```
+
+Use the expanded value as `[location]`. Two forms are accepted:
+
+| Form | Example | Notes |
+|------|---------|-------|
+| Local directory path | `~/.workflows` | Works — filesystem directories are listable |
+| URL to `index.md` | `https://example.com/workflows/index.md` | Required — bare directory URLs return 404 on static sites |
+
+If the URL ends with `/index.md`, strip that suffix to get the base: `https://example.com/workflows`
+
+### Step 2: Determine Access Method
+
+| Location type | Access method |
+|--------------|---------------|
+| Starts with `http://` or `https://` | WebFetch tool |
+| Starts with `~/`, `/`, or `./` | Read tool |
+
+### Step 3: Fetch the Workflow File
+
+Construct the path: `[location]/[workflow-name]/workflow.md`
+
+Examples:
+- `~/.workflows/plan/workflow.md` → Read tool
+- `https://example.com/workflows/plan/workflow.md` → WebFetch tool
+
+### Step 4: Resolve Supporting Files
+
+When a workflow references `PATTERNS.md` or a template, use the same base location:
+
+- PATTERNS.md → `[location]/PATTERNS.md`
+- Templates → `[location]/templates/[filename]`
+
+### Step 5: Create Artifacts Locally
+
+All task folders, interview files, and output documents are created in the **current working directory** — not at the remote location.
 
 ### Available Workflows
 
