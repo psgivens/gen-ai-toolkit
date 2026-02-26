@@ -503,6 +503,21 @@ For major directories without READMEs:
 
 ### Step 11: Final Validation
 
+**Completion gate — artifact required:**
+Before closing the documentation workflow, at least one actual documentation artifact must be created or updated (not just DOCUMENTATION_ASSESSMENT.md). Acceptable artifacts:
+- Updated or created ARCHITECTURE.md
+- New or updated README.md
+- docs/CLAUDE.md (development guidelines)
+- A component guide in docs/code/
+- An Architecture Decision Record in docs/adrs/
+
+If the session produced only DOCUMENTATION_ASSESSMENT.md with no actual artifacts:
+```
+The assessment is complete, but no documentation was actually updated.
+Which item from the assessment should we address now?
+Even completing one document makes this session significantly more valuable.
+```
+
 Validate all documentation created:
 
 **User Documentation:**

@@ -86,7 +86,10 @@ When starting an interview:
 
 1. Create interview document (`*_INTERVIEW.md`)
 2. Add "## Interview Round 1" section
-3. Provide **up to 15 questions** relevant to the phase (see Phase-Specific Behaviors below)
+3. Provide **10–12 high-value questions** relevant to the phase (see Phase-Specific Behaviors below)
+   - Mark each question with importance: **[HIGH]** (blocks phase outcome), **[MEDIUM]** (important, has good defaults), or **[LOW]** (nice to know)
+   - Skip questions where Claude can infer the answer or where confirmation adds no value
+   - Focus question slots on decisions with multiple valid user-dependent answers
 4. Each question includes:
    - **Your Answer:** [Space for user]
    - **Your Questions for Claude:** [Space for user to ask questions back]
@@ -143,6 +146,22 @@ When user types **'iterate'** during an interview:
 6. **Wait for user response**
 7. **Repeat** if user types 'iterate' again
 
+### After Round 2: Status Check-In
+
+After completing Round 2 of any interview, add a brief status check-in before generating follow-up questions:
+
+```markdown
+## Interview Status Check-In (After Round 2)
+
+**Covered so far:** [2-3 bullet summary of what's been established]
+
+**Remaining uncertainties:** [what's still unclear or unaddressed]
+
+**Recommendation:** [Continue (N more questions needed) OR Generate document (enough to proceed)]
+```
+
+Then prompt: "We've completed 2 rounds. Based on the above, should we continue the interview or generate the [OUTPUT_DOCUMENT] now?"
+
 ### Step 3: Document Generation
 
 When user types **'continue to next phase'** during an interview:
@@ -174,7 +193,7 @@ Each phase customizes the interview pattern with specific focuses:
 #### Requirements Interview
 - **File:** `REQUIREMENTS_INTERVIEW.md`
 - **Focus:** WHAT not HOW
-- **Initial questions (up to 15) about:**
+- **Initial questions (10–12) about:**
   - Desired outcomes and success criteria
   - Inputs and outputs
   - Edge cases and error handling
@@ -188,7 +207,7 @@ Each phase customizes the interview pattern with specific focuses:
 #### Design Interview
 - **File:** `DESIGN_INTERVIEW.md`
 - **Focus:** Architectural decisions and trade-offs
-- **Initial questions (up to 15) about:**
+- **Initial questions (10–12) about:**
   - Technology stack and frameworks
   - Architecture patterns and structure
   - Data storage and management
@@ -198,12 +217,13 @@ Each phase customizes the interview pattern with specific focuses:
   - Deployment and infrastructure
   - Security considerations
 - **Question format:** Lead with recommendation (e.g., "What X should we use? I recommend Y because [reason]. Alternatives: A (pros/cons), B (pros/cons)")
+- **Batch size:** Present a maximum of 5 recommendations per round. After each batch: "Want to refine any of these before seeing the next batch?" Prevents bulk rubber-stamping.
 - **Output Document:** DESIGN.md with decided options
 
 #### Architecture Interview
 - **File:** `ARCHITECTURE_INTERVIEW.md`
 - **Focus:** System structure and components
-- **Initial questions (up to 15) about:**
+- **Initial questions (10–12) about:**
   - System components and their responsibilities
   - Data flows and transformations
   - Integration points and interfaces
@@ -247,7 +267,7 @@ Each phase customizes the interview pattern with specific focuses:
 #### Refinement Interview
 - **File:** `REFINEMENT_INTERVIEW.md`
 - **Focus:** Understanding refactoring goals and risks
-- **Initial questions (up to 15) about:**
+- **Initial questions (10–12) about:**
   - Scope and boundaries of the refactoring
   - Current pain points and desired improvements
   - Risks and dependencies
@@ -260,6 +280,20 @@ Each phase customizes the interview pattern with specific focuses:
   - Timeline and urgency
   - Files and modules affected
 - **Output Document:** REFINEMENT_PLAN.md
+
+### Phase Boundary Guidance
+
+Each phase covers a distinct concern. Use this table to stay in scope during interviews:
+
+| Phase | Covers | Example In-Scope | Example Out-of-Scope |
+|-------|--------|------------------|---------------------|
+| Requirements | WHAT to build | "Support bulk file upload" | "Use React for the UI" |
+| Design | HOW — technology choices | "Use PostgreSQL for storage" | "The upload endpoint is /api/files" |
+| Architecture | System structure | "File service handles all I/O" | "The upload will take 200ms" |
+| Plan | Implementation sequencing | "Build file service before API" | "Use async/await for uploads" |
+| Implement | Execution details | Specific code changes | New features not in requirements |
+
+If a question or answer crosses a boundary, redirect: "That's a [design/architecture] question — we'll address it in the [design/architecture] workflow."
 
 ### Standard Prompt Format
 
@@ -417,7 +451,7 @@ Every workflow must establish which task folder to use for storing artifacts. Th
 2. **Check for existing folders:**
    - List all task folders under `claude/`
    - **If exactly one exists:** Ask "I found task folder: claude/[folder-name]. Should I use this one?"
-   - **If multiple exist:** Ask "Which task should I work on?" and list folders with their names
+   - **If multiple exist:** First ask "What are you working on today?" then suggest the best-matching folder with reasoning: "Based on what you said, I think you mean `[folder]` — is that right?" Only list all folders if the best match is unclear.
    - **If none exist:** Prompt "What should I name this task folder? (Suggested format: YYYY-MM-DD-description, e.g., '2026-01-22-add-feature')"
 
 3. **Create folder if needed:**
@@ -664,6 +698,201 @@ The patterns work together to create a complete workflow system:
    - Iterate on document if needed
 6. **Workflow Progression**: Announce completion and suggest next workflow
 7. User invokes next workflow in sequence
+
+## MISSION.md Standard
+
+Every workflow begins with a MISSION.md. This is Step 0 of every workflow — the prerequisite that orients both user and Claude before any interview begins.
+
+### Required Sections
+
+```markdown
+# Mission: [Brief Title]
+
+## Goal
+[1-2 sentences: what will be built and why]
+
+## Out of Scope
+[What are we explicitly NOT doing in this epic? Be specific.]
+Examples: "Mobile apps", "API authentication", "Performance optimization past current baseline"
+
+## Code Entry Points
+[Where does execution begin for this feature? Critical for Claude orientation.]
+- Main entry: [file path] — [what it does]
+- Feature slice: [file path] — [what it does]
+- IPC handler: [file path if applicable]
+
+## Git Branch
+- Branch: [feature/description]
+- Base: [main / develop]
+
+## Success Criteria
+[How will we know this is done? 3-5 measurable outcomes]
+```
+
+### Usage in Workflows
+
+When a workflow says "read MISSION.md" or "establish MISSION.md":
+- If MISSION.md already exists, read it and echo the Out of Scope and Code Entry Points sections
+- If MISSION.md does not exist, create it using the template above before proceeding
+- Out of Scope is required — do not leave it blank
+
+### Why This Matters
+
+- **Out of Scope** prevents scope creep at implementation time — no re-arguing what was never included
+- **Code Entry Points** cuts Claude's per-session codebase exploration by 10+ minutes
+- **Git Branch** prevents accidental work on wrong branch
+
+## PROJECT_CONTEXT.md Standard
+
+A project-wide reference document (not per-task) that orients Claude at the start of every session. Created once per project; updated when architecture changes.
+
+### Location and Lifecycle
+
+- **Location:** Project root (alongside ARCHITECTURE.md, README.md)
+- **Created:** Once, before or during first major task
+- **Updated:** When tech stack changes, new patterns established, new gotchas discovered
+- **Read:** Step 1 of every workflow, before any task-specific documents
+
+### Required Sections
+
+```markdown
+# Project Context: [Project Name]
+
+## Tech Stack
+- [Technology]: [version] — [how used]
+- [Technology]: [version] — [how used]
+
+## Directory Structure
+```
+[root]/
+├── [dir]/ — [purpose]
+│   ├── [subdir]/ — [purpose]
+│   └── [file] — [role]
+├── [dir]/ — [purpose]
+```
+
+## Main Entry Points
+- [feature area]: `[file path]` — [description]
+- [feature area]: `[file path]` — [description]
+
+## Key Architectural Patterns
+- **[Pattern name]:** [1-sentence description + example location]
+- **[Pattern name]:** [1-sentence description]
+
+## Known Gotchas
+- **[Issue]:** [Problem description] → [Solution/workaround]
+- **[Issue]:** [Problem description] → [Solution/workaround]
+
+## Build / Test / Run Commands
+```bash
+# Build
+[command]
+
+# Test
+[command]
+
+# Run dev
+[command]
+```
+
+## Integration Points
+- [External system]: [how integrated, relevant file]
+- [External system]: [how integrated, relevant file]
+
+## Git Workflow
+- Main branch: [branch name]
+- Feature branch format: [e.g., feature/description]
+- [Any other conventions]
+```
+
+### Checking for PROJECT_CONTEXT.md
+
+At Step 1 of every workflow, check for PROJECT_CONTEXT.md:
+
+```
+Check if PROJECT_CONTEXT.md exists at project root.
+- If yes: read it before any task-specific context
+- If no: note that the project would benefit from one (prompt once per project, not every session)
+```
+
+## Parking Lot Pattern
+
+A formal mechanism for capturing out-of-scope ideas discovered during implementation — without losing them and without derailing current work.
+
+### PARKING_LOT.md Structure
+
+```markdown
+# Parking Lot
+
+Items discovered during implementation that are worth pursuing later, but not in scope for the current epic.
+
+## Items
+
+### [Short Title]
+**Category:** Feature / Bug / Improvement / Refactoring
+**Description:** What is it?
+**Why deferred:** [Brief reason — not in scope, too risky, different epic]
+**Suggested epic:** [future epic name or "backlog"]
+**Found during:** Step [N] — [step description]
+**Priority:** HIGH / MEDIUM / LOW
+```
+
+### When to Use
+
+The Parking Lot is created as an empty file at the start of implementation. Use it whenever something out-of-scope arises that's worth remembering:
+
+**Diversion Decision Tree:**
+```
+Out-of-scope work arises. Is it blocking the current step?
+├─ YES → Create IMPLEMENTATION_INTERVIEW.md (Problem → Options → Decision)
+└─ NO → Is it worth pursuing later?
+   ├─ YES → Add to PARKING_LOT.md, continue current task
+   └─ NO → Acknowledge and discard, continue current task
+```
+
+### Integration with Implement Workflow
+
+- Create `PARKING_LOT.md` at the start of implementation (Step 0 output, alongside initializing the task folder)
+- Reference it in each step review: "Items deferred to parking lot: N"
+- At implementation end: present parking lot items to user for backlog incorporation
+
+## Session Re-entry Pattern
+
+A lightweight protocol for orienting Claude at the start of a new session when continuing existing work.
+
+### When to Use
+
+- Start of any new conversation continuing prior work
+- User says "where were we?", "get me up to speed", or "continue"
+- Session was interrupted mid-implementation
+
+### Fixed Read Order
+
+Read these documents in order (stop when you have enough context):
+
+1. **PROJECT_CONTEXT.md** (project root) — tech stack, patterns, gotchas
+2. **PRODUCT_WINDSHIELD.md** or equivalent project navigation doc — current focus
+3. **claude/[task-folder]/MISSION.md** — current epic goal and scope
+4. **claude/[task-folder]/IMPLEMENTATION_PLAN.md** — current plan state (status table)
+5. **PARKING_LOT.md** (if exists) — deferred items
+
+### Status Echo Format
+
+After reading, echo a 5-line status summary:
+
+```
+Current epic: [MISSION.md title]
+Progress: Step [N] of [Total] — [current step name]
+Status: [In Progress / Blocked / Ready to continue]
+Next action: [1-sentence description of what to do next]
+Parking lot: [N items / empty]
+```
+
+Then prompt: "Ready to continue? Tell me where to pick up or say 'continue' to proceed from where we left off."
+
+### Output
+
+This pattern produces no file artifacts — status echo only. All reading is local to the session.
 
 ## Documentation Standards
 

@@ -18,9 +18,19 @@ You are guiding the user through Phase 2: Design Decisions of a structured devel
 ### Step 1: Read Context and Discover Existing Patterns
 
 1. **Read requirements:**
+   - Check if `PROJECT_CONTEXT.md` exists at project root. If yes, read it first — it contains established patterns that should inform design recommendations.
    - Read `claude/${TASK_FOLDER}/REQUIREMENTS.md` to understand what needs to be built
    - Read `claude/${TASK_FOLDER}/MISSION.md` to understand design tenets and priorities
 
+**Create EXISTING_PATTERNS.md before the interview:**
+Before generating design questions, create `claude/${TASK_FOLDER}/EXISTING_PATTERNS.md` by exploring the codebase:
+- List established architectural patterns (how components communicate, data flow patterns)
+- List established coding conventions (naming, file structure, error handling)
+- List reusable components that exist (so we don't duplicate them)
+- Note any patterns that SHOULD NOT be followed (deprecated, being replaced)
+ 
+This document prevents design recommendations that contradict existing patterns and reduces codebase re-exploration in future sessions.
+ 
 2. **Check for living architecture documentation:**
    - Look for `ARCHITECTURE.md` or `docs/ARCHITECTURE.md` at project root
    - If exists: Read it thoroughly - this is the source of truth for established patterns
@@ -116,6 +126,16 @@ You are guiding the user through Phase 2: Design Decisions of a structured devel
   - Testing approach (use existing frameworks, extend coverage if needed)
   - Security considerations (follow existing patterns, add feature-specific needs)
 
+ 
+#### Recommendation Batching
+ 
+**Recommendation batching:** Present a maximum of 5 design recommendations per interview round. After presenting 5 recommendations:
+- Ask: "Want to refine any of these before I continue with the next decisions?"
+- Wait for user feedback
+- Then present the next batch of 5
+ 
+This prevents bulk rubber-stamping where users approve many decisions without reading them carefully.
+ 
 #### Question Format
 
 **For decisions already made by existing codebase:**

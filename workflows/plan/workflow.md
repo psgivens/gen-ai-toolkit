@@ -18,6 +18,7 @@ This workflow generates IMPLEMENTATION_PLAN.md directly by breaking down the arc
 ### Step 1: Read Context
 
 Read all necessary context documents:
+- Check if `PROJECT_CONTEXT.md` exists at project root. If yes, read it first.
 - Read `claude/${TASK_FOLDER}/REQUIREMENTS.md` to understand what needs to be built
 - Read `claude/${TASK_FOLDER}/DESIGN.md` to understand architectural choices
 - Read `claude/${TASK_FOLDER}/ARCHITECTURE.md` to understand the system architecture
@@ -32,6 +33,8 @@ Architecture is needed before creating an implementation plan. Please complete t
 ### Step 2: Generate Implementation Plan
 
 Based on the context read in Step 1, create `claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md` directly.
+
+**Note on planning approach:** This workflow generates the plan directly from the architecture documents rather than conducting a planning interview. This is intentional — users engage better reviewing a complete draft plan than answering sequential planning questions (the Q&A format has low completion rates for planning tasks). Present the complete draft, then iterate based on user feedback.
 
 #### Document Structure
 
@@ -82,6 +85,12 @@ Before starting implementation:
 | 1. [Task name] | Not Started | [Initial details] |
 | 2. [Task name] | Not Started | [Initial details] |
 | ... | | |
+
+## Parking Lot
+
+Items discovered during implementation that are out of scope for this epic but worth tracking.
+See `claude/${TASK_FOLDER}/PARKING_LOT.md` for the full parking lot.
+(This section is populated during implementation, not planning.)
 
 ## Testing Approach
 

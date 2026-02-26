@@ -16,40 +16,106 @@ You are guiding the user through Phase 5: Execute Implementation of a structured
 **Follow Task Folder Management Pattern** to establish task folder
 
 ### Step 1: Read the Plan
+
+- Check if `PROJECT_CONTEXT.md` exists at project root. If yes, read it first.
+- Read `claude/${TASK_FOLDER}/MISSION.md` if it exists — note the **Out of Scope** section
 - Read `claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md` to understand all steps
 - Read `claude/${TASK_FOLDER}/ARCHITECTURE.md` for architectural guidance
 - Verify you understand the full scope before starting
 
-### Step 2: Execute Implementation Steps
+**Out of Scope validation:** Scan all implementation steps and flag any that may implement something listed as Out of Scope in MISSION.md. If a conflict is found, notify the user: "Step [N] may be implementing [X] which is listed as Out of Scope in MISSION.md. Should we proceed, modify, or skip this step?"
 
-#### Execution Process
-1. **Start with first "Not Started" step**
-   - Before implementing, explain what you're about to do
+**Create PARKING_LOT.md:**
+Create `claude/${TASK_FOLDER}/PARKING_LOT.md` with initial content:
+```markdown
+# Parking Lot
+
+Items discovered during implementation that are out of scope for the current epic.
+See MISSION.md "Out of Scope" section for what's explicitly excluded.
+
+## Items
+
+(empty — add items as discovered)
+```
+
+### Step 2: Confirm Execution Mode
+
+Before starting, confirm how much autonomy the user wants:
+
+```
+Ready to execute [N] steps.
+
+Execution mode:
+- **Autonomous** (default): I'll run all steps without stopping, echo a one-line status after each,
+  and only pause if a blocker, test failure, or scope issue arises. You can type at any time to interrupt.
+- **Interactive**: I'll stop after each step and wait for your "continue" before proceeding.
+
+Which mode? (Press Enter or say "go" for autonomous, or say "interactive" to stop after each step.)
+```
+
+Wait for user response. Default to **autonomous** if user says "go", "continue", "start", or just presses Enter.
+
+### Step 3: Execute Implementation Steps
+
+#### Autonomous Execution (default)
+
+Run all steps sequentially without pausing between them. After each step:
+
+1. **Implement the step**
    - Execute the step (write code, create files, etc.)
    - Follow the architecture and patterns defined in ARCHITECTURE.md
 
-2. **Update Status Tracking**
-   - After completing each step, immediately update the status tracking table in `claude/${TASK_FOLDER}/IMPLEMENTATION_PLAN.md`
-   - Change status from "Not Started" → "In Progress" → "Complete"
-   - Add notes about what was done, any issues encountered, or deviations from plan
+2. **Update Status Tracking immediately**
+   - Change status: "Not Started" → "In Progress" → "Complete"
+   - Add brief notes about what was done
 
-3. **Review Gate After Each Step**
-   - After completing a step, prompt:
-     ```
-     Step [N] complete: [brief summary].
+3. **Echo one-line status** (do NOT stop and wait):
+   ```
+   ✓ Step [N]/[Total]: [brief summary] — [N items deferred to parking lot / no diversions]
+   ```
+   Then immediately proceed to the next step.
 
-     What would you like to do?
-     - Type 'iterate' to review and refine this step
-     - Type 'continue to next phase' to proceed to step [N+1]
-     ```
-   - Wait for user response
-   - If user chooses iterate, make changes and update status notes
+4. **STOP only for genuine blockers:**
+   - A test fails and can't be quickly fixed
+   - A blocker requires a design decision (create IMPLEMENTATION_INTERVIEW.md)
+   - A step would implement something in MISSION.md's Out of Scope
+   - An unexpected dependency or prerequisite is missing
 
-4. **Test as You Go**
-   - After major steps, verify functionality
-   - Run any tests specified in the plan
-   - Report test results to the user
-   - Fix any failing tests before proceeding
+5. **Test as You Go**
+   - After steps that complete a major layer, run tests
+   - If tests pass: echo result and continue
+   - If tests fail: STOP, report failure, propose fix or use Diversion Protocol
+
+#### Interactive Execution (if user requested)
+
+Stop after each step and prompt:
+```
+Step [N] complete: [brief summary].
+Scope check: Items deferred to PARKING_LOT.md: [N]
+
+Type 'continue' to proceed to Step [N+1], or tell me what to change.
+```
+Wait for user response before proceeding.
+
+#### Diversion Protocol
+
+When something out-of-scope arises during implementation:
+
+```
+Out-of-scope work discovered. Is it blocking the current step?
+├─ YES → Create IMPLEMENTATION_INTERVIEW.md (Problem → Options with pros/cons → Decision Question)
+│        Present options to user, wait for decision before proceeding
+└─ NO → Is it worth pursuing later?
+   ├─ YES → Add to PARKING_LOT.md, continue current step
+   └─ NO → Acknowledge and discard, continue current step
+```
+
+Do NOT interrupt implementation flow for non-blocking discoveries. Add to PARKING_LOT.md and continue.
+
+**Research spike time-box:** If a step requires investigation (testing library behavior, checking feasibility):
+- Time-box to 30 minutes
+- If not resolved in 30 minutes, escalate: create IMPLEMENTATION_INTERVIEW.md describing what was investigated, what was found, and what decision is needed
+- Do not continue open-ended research without a structured decision point
 
 #### Handling Issues and Blockers
 
@@ -64,13 +130,13 @@ If you encounter problems during implementation:
    - When user responds with "iterate", answer their questions and ask follow-ups if needed
 3. Don't skip steps or mark them complete if they have issues
 
-### Step 3: Continue Through All Steps
-- Work through each step sequentially
-- Maintain the review gate pattern (complete → prompt → wait → continue)
-- Keep status tracking updated
+### Step 4: Continue Through All Steps
+- Work through each step sequentially without pausing (autonomous mode)
+- Keep status tracking updated after every step
 - Stay focused on the plan (don't add features not in requirements)
+- If user types anything mid-execution, pause, acknowledge, and handle before continuing
 
-### Step 4: Final Verification
+### Step 5: Final Verification
 When all steps are complete:
 1. Perform final testing
 2. Verify all requirements from `claude/${TASK_FOLDER}/REQUIREMENTS.md` are met
@@ -85,14 +151,14 @@ When all steps are complete:
    ```
 
 ## Best Practices
+- **Default to autonomous execution** — don't stop and ask unless something is genuinely wrong
 - Update status tracking immediately after each step (don't batch updates)
 - Be honest about issues or blockers (don't mark things complete if they're not)
 - Follow the architecture and patterns defined in ARCHITECTURE.md
 - Write clean, maintainable code that follows project standards
-- Test thoroughly as you go
-- If you discover requirements issues during implementation, note them
-- Keep the user informed of progress
+- Test thoroughly as you go — pass: continue; fail: stop and report
+- If you discover requirements issues during implementation, add to PARKING_LOT.md and continue
 - Don't add scope or features beyond what's in REQUIREMENTS.md
-- If you need to deviate from the plan, explain why and get approval
-- Use the interview pattern (IMPLEMENTATION_INTERVIEW.md) to address blockers collaboratively
-- When creating interview questions for blockers, provide recommendations and alternatives
+- If you need to deviate from the plan, note the deviation in status tracking and continue (unless it touches Out of Scope)
+- Use the interview pattern (IMPLEMENTATION_INTERVIEW.md) only for genuine blockers that require a user decision
+- The bar for stopping is: blocker / test failure / scope violation / user interruption — not routine step completion

@@ -6,6 +6,23 @@ Guide the user through making refinements to the current project using an interv
 ## Trigger
 When user invokes this workflow (e.g., `execute ~/.workflows/refinement`) or says "refine this project", "do some cleanup", "refactor the code", or "reorganize the project"
 
+**Refinement vs. Quick Task — When to Use Each:**
+
+Use the **refinement workflow** when:
+- Changes span multiple files with potential ripple effects
+- Risk analysis is needed (what could break?)
+- A safe rollback path must be established
+- The scope is uncertain (need to discover what needs changing)
+- Breaking changes are possible
+
+Use the **quick-task workflow** when:
+- The change is isolated to 1–3 files
+- Low risk — existing tests cover the area
+- The change is obvious and bounded
+- No architectural decisions needed
+
+If uncertain, ask: "Are there parts of this change that could break other things unexpectedly?" — if yes, use refinement.
+
 ## Instructions
 
 You are guiding the user through a structured refinement workflow to improve code quality, organization, or structure.

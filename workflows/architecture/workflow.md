@@ -18,6 +18,7 @@ This workflow generates ARCHITECTURE.md directly based on requirements and desig
 ### Step 1: Read Context
 
 Read all necessary context documents:
+- Check if `PROJECT_CONTEXT.md` exists at project root. If yes, read it — use it to understand current entry points and patterns before designing the new architecture.
 - Read `claude/${TASK_FOLDER}/REQUIREMENTS.md` to understand what needs to be built
 - Read `claude/${TASK_FOLDER}/DESIGN.md` to understand architectural choices made
 - Read `claude/${TASK_FOLDER}/MISSION.md` to understand design tenets (if applicable)
@@ -204,6 +205,23 @@ If no ADRs exist yet, omit this section.]
 | [e.g., REST over GraphQL] | [e.g., Simpler client integration, caching benefits] | [ADR-002](docs/adrs/ADR-002-api-style.md) |
 ```
 
+ 
+#### Code Entry Points (Required)
+ 
+Document the main entry points for this feature/system:
+ 
+```markdown
+## Code Entry Points
+ 
+- **[Feature area]:** `[file path]` — [what it does, where execution starts]
+- **[Feature area]:** `[file path]` — [what it does]
+- **IPC handler (if applicable):** `[file path]` — [channels handled]
+- **Main process entry:** `[file path]` — [description]
+- **Renderer entry:** `[file path]` — [description]
+```
+ 
+**Why required:** Without explicit entry points, Claude must grep and explore to find where to begin implementing — this is repeated every session. Entry points cut per-session orientation time significantly.
+ 
 #### Generation Guidelines
 
 When creating ARCHITECTURE.md:

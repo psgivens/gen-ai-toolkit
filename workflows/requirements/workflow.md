@@ -15,9 +15,28 @@ You are guiding the user through Phase 1: Requirements Discovery of a structured
 ### Step 0: Determine Task Folder
 **Follow Task Folder Management Pattern** to establish task folder
 
-### Step 1: Create MISSION.md Document
+### Step 1: Check Context Documents
+
+**Check for PROJECT_CONTEXT.md:**
+Check if `PROJECT_CONTEXT.md` exists at project root.
+- If yes: read it — note tech stack, patterns, and integration points for later interview questions
+- If no: proceed without it
+
+**Establish MISSION.md:**
+Check if `claude/${TASK_FOLDER}/MISSION.md` exists.
+- If yes: read it — use Out of Scope section to scope interview questions; echo the Goal and Out of Scope to user before starting
+- If no: proceed to Step 2 to create it
+
+Echo to user (if MISSION.md exists):
+```
+Starting requirements interview for: [MISSION.md Goal]
+Out of Scope for this epic: [list from MISSION.md Out of Scope]
+```
+
+### Step 2: Create MISSION.md Document
 - Create `claude/${TASK_FOLDER}/MISSION.md` with the following template
 - Prompt the user to fill out the template describing what they want to build
+- **The Out of Scope section is required** — do not leave it blank
 - Wait for user response before proceeding
 
 Template:
@@ -71,11 +90,11 @@ Template:
 
     **Next Step**: Execute the requirements workflow to begin the requirements discovery phase.
 
-### Step 2: Read Mission
+### Step 3: Read Mission
 - Read `claude/${TASK_FOLDER}/MISSION.md` to understand the project goal
 - If MISSION.md doesn't exist or is empty, ask the user to describe their goal and offer to create it for them
 
-### Step 3: Conduct Requirements Interview
+### Step 4: Conduct Requirements Interview
 **Follow Interview Pattern** to conduct requirements interview:
 
 #### Phase-Specific Focus
@@ -100,7 +119,7 @@ When generating REQUIREMENTS.md, follow this structure:
 - Functional requirements (numbered list)
 - Non-functional requirements (performance, security, scalability)
 - Constraints (technical, business, or resource limitations)
-- Out of scope (explicitly state what we're NOT doing)
+- Out of scope (explicitly state what we're NOT doing) — **Required.** Reference MISSION.md's Out of Scope section and add any additional boundaries discovered during the interview. Without explicit Out of Scope, scope creep arguments arise at implementation time.
 
 #### Next Workflow
 When user types 'continue to next phase' after finalizing REQUIREMENTS.md, say:
