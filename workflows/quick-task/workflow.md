@@ -89,9 +89,11 @@ Execute the implementation plan step by step.
 For each step:
 1. Update status to In Progress
 2. Implement the change
-3. Verify against the step's verification criteria
-4. Update status to Complete
-5. Echo brief summary of what was done
+3. If the change introduces any new function, class, or service: write unit tests for it now (not later)
+4. Run `npm test` (or project test command) and confirm green
+5. Verify against the step's verification criteria
+6. Update status to Complete
+7. Echo brief summary of what was done
 
 After each step:
 

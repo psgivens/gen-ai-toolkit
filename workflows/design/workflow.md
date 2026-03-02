@@ -123,7 +123,7 @@ This document prevents design recommendations that contradict existing patterns 
   - Data storage (reference existing DB/ORM unless new storage needed)
   - API design (reference existing API patterns unless new approach needed)
   - Error handling (reference existing strategy, extend if needed)
-  - Testing approach (use existing frameworks, extend coverage if needed)
+  - **Testing approach** — explicitly decide: what layers get unit tests, what gets mocked, what's too expensive to unit test and needs integration tests; confirm the test command and test file naming convention
   - Security considerations (follow existing patterns, add feature-specific needs)
 
  

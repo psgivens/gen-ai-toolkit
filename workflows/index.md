@@ -70,6 +70,7 @@ All task folders, interview files, and output documents are created in the **cur
 | `documentation` | `documentation/workflow.md` | User and codebase documentation |
 | `refinement` | `refinement/workflow.md` | Refactoring, cleanup, and reorganization |
 | `bug-bash` | `bug-bash/workflow.md` | Systematic bug triage, fix, and verification |
+| `bug` | `bug/workflow.md` | Single-bug lifecycle: record → investigate → plan → fix → verify |
 | `quick-task` | `quick-task/workflow.md` | Lightweight implementation for small features |
 
 ### All Files in This Directory
@@ -86,6 +87,7 @@ implement/workflow.md                — Implement workflow
 documentation/workflow.md            — Documentation workflow
 refinement/workflow.md               — Refinement workflow
 bug-bash/workflow.md                 — Bug bash workflow
+bug/workflow.md                      — Single-bug lifecycle workflow
 quick-task/workflow.md               — Quick task workflow
 
 templates/ADR_TEMPLATE.md            — Architecture Decision Record template
@@ -99,7 +101,8 @@ templates/CLAUDE_PROJECT_TEMPLATE.md — Claude project guidelines template
 requirements → design → architecture → plan → implement → documentation
                                                     ↑
                                    refinement  (invoke at any time independently)
-                                   bug-bash    (invoke at any time independently)
+                                   bug-bash    (invoke at any time independently — multi-bug triage)
+                                   bug         (invoke at any time independently — single bug lifecycle)
                                    quick-task  (lightweight alternative to full pipeline)
 ```
 

@@ -99,6 +99,10 @@ Template:
 
 #### Phase-Specific Focus
 - **Focus:** WHAT not HOW (requirements and outcomes, not implementation)
+- **For every question, include a recommendation.** After posing the question,
+  add a brief `> **Recommendation:**` note explaining which option you suggest
+  and why, based on the project context, design tenets, and existing patterns.
+  This gives the user a sensible default to accept or override.
 - **Initial questions (up to 15) should explore:**
   - Desired outcomes and success criteria
   - Inputs and outputs

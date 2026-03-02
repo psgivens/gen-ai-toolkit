@@ -65,24 +65,31 @@ Run all steps sequentially without pausing between them. After each step:
    - Execute the step (write code, create files, etc.)
    - Follow the architecture and patterns defined in ARCHITECTURE.md
 
-2. **Update Status Tracking immediately**
+2. **Write unit tests if new code was introduced**
+   - If the step creates any new function, class, or service: write unit tests for it before marking the step complete
+   - Use the test file named in the step's Verification section (from IMPLEMENTATION_PLAN.md)
+   - Run `npm test` (or project test command) and confirm all new tests pass
+   - Do NOT defer unit tests to a later step — inline testing is the rule
+
+3. **Update Status Tracking immediately**
    - Change status: "Not Started" → "In Progress" → "Complete"
    - Add brief notes about what was done
 
-3. **Echo one-line status** (do NOT stop and wait):
+4. **Echo one-line status** (do NOT stop and wait):
    ```
    ✓ Step [N]/[Total]: [brief summary] — [N items deferred to parking lot / no diversions]
    ```
    Then immediately proceed to the next step.
 
-4. **STOP only for genuine blockers:**
+5. **STOP only for genuine blockers:**
    - A test fails and can't be quickly fixed
    - A blocker requires a design decision (create IMPLEMENTATION_INTERVIEW.md)
    - A step would implement something in MISSION.md's Out of Scope
    - An unexpected dependency or prerequisite is missing
 
-5. **Test as You Go**
-   - After steps that complete a major layer, run tests
+6. **Test as You Go**
+   - Unit tests are written inline (step 2 above), not batched at the end
+   - After completing each step (whether or not it introduced new code), run the full test suite
    - If tests pass: echo result and continue
    - If tests fail: STOP, report failure, propose fix or use Diversion Protocol
 
@@ -156,7 +163,7 @@ When all steps are complete:
 - Be honest about issues or blockers (don't mark things complete if they're not)
 - Follow the architecture and patterns defined in ARCHITECTURE.md
 - Write clean, maintainable code that follows project standards
-- Test thoroughly as you go — pass: continue; fail: stop and report
+- Write unit tests inline — if a step creates a new function, class, or service, write unit tests for it before marking the step complete; run `npm test`; pass: continue; fail: fix and rerun before proceeding
 - If you discover requirements issues during implementation, add to PARKING_LOT.md and continue
 - Don't add scope or features beyond what's in REQUIREMENTS.md
 - If you need to deviate from the plan, note the deviation in status tracking and continue (unless it touches Out of Scope)

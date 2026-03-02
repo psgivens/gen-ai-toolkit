@@ -32,20 +32,20 @@ Each interview phase creates a `*_INTERVIEW.md` file with this structure:
 ### Question 1: [Question text]
 
 **Your Answer:**
-[Space for user to answer]
+
 
 **Your Questions for Claude:**
-[Space for user to ask questions back]
+
 
 ---
 
 ### Question 2: [Question text]
 
 **Your Answer:**
-[Space for user to answer]
+
 
 **Your Questions for Claude:**
-[Space for user to ask questions back]
+
 
 ---
 
@@ -70,10 +70,10 @@ Each interview phase creates a `*_INTERVIEW.md` file with this structure:
 ### Question 1: [Follow-up question based on previous answers]
 
 **Your Answer:**
-[Space for user to answer]
+
 
 **Your Questions for Claude:**
-[Space for user to ask questions back]
+
 
 ---
 

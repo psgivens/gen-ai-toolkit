@@ -64,8 +64,9 @@ Before starting implementation:
 **Dependencies:** None (or list step numbers this depends on)
 **Expected outcome:** [What should work after this step]
 **Verification:**
-- [ ] [How to test this step, e.g., "Run `npm test`"]
-- [ ] [Expected result, e.g., "API returns 200"]
+- [ ] [Unit tests written for any new functions/classes/services — name the file, e.g., `tests/unit/services/foo.test.ts`]
+- [ ] [`npm test` passes with all new tests green]
+- [ ] [Manual/integration check if applicable, e.g., "API returns 200"]
 
 ### Step 2: [Next Logical Task]
 **What:** [Description]
@@ -146,10 +147,12 @@ When creating the implementation plan:
    - Backend before frontend (usually)
    - Core functionality before edge cases
 
-4. **Include testing at each layer:**
-   - Don't leave all testing to the end
-   - After implementing a component, test it
-   - Pattern: Implement → Test → Verify → Next
+4. **Include unit tests at each step (not at the end):**
+   - Any step that introduces a new function, class, or service MUST include writing unit tests as part of that step — not as a separate later step
+   - Name the test file explicitly in the Verification section (e.g., `tests/unit/services/tags/database.test.ts`)
+   - Verification should include: "Write unit tests for [class/function], run `npm test`, all new tests pass"
+   - Pattern: Implement → Write Unit Tests → Run `npm test` → Verify Green → Next
+   - Leaving testing to the end produces gaps and is harder to enforce autonomously
 
 5. **Be specific:**
    - Name actual files that will be created
@@ -172,7 +175,7 @@ After generating IMPLEMENTATION_PLAN.md, validate it:
 - All functional requirements from REQUIREMENTS.md have implementation steps
 - Steps follow architecture structure from ARCHITECTURE.md
 - Dependencies are correct (no circular dependencies)
-- Testing is integrated throughout, not just at the end
+- Testing is integrated throughout: each step that introduces new code names a specific test file and includes a `npm test` verification — not just "add tests later"
 - Each step has clear verification criteria
 
 ### Step 4: Prompt for Review

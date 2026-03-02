@@ -169,17 +169,24 @@ Examples:
 
 ## Testing Strategy
 
+<!-- Before writing this section: read the existing test setup.
+     Check: package.json test script, tests/ directory structure, existing test files.
+     Use actual test file paths and the real test command from the project. -->
+
 **Unit Tests:**
-- [What to test at unit level, where tests live]
-- [Mocking approach]
+- [What to test at unit level — name specific classes/functions that will be tested]
+- [Test file location convention, e.g., `tests/unit/services/[name].test.ts`]
+- [Mocking approach — e.g., in-memory SQLite, vitest mocks, real temp files]
 
 **Integration Tests:**
-- [What to test at integration level]
-- [How to set up test environment]
+- [What to test at integration level — e.g., service + DB sharing a real temp file]
+- [Test file location, e.g., `tests/unit/services/[name]/integration.test.ts`]
 
 **E2E Tests:**
-- [Critical user journeys to test]
+- [Critical user journeys to test, if applicable]
 - [Test environment setup]
+
+**Test Command:** `[e.g., npm test]`
 
 ## Deployment Architecture
 
@@ -232,10 +239,11 @@ When creating ARCHITECTURE.md:
 5. **Explain decisions** - Don't just state what, explain why
 6. **Be implementation-ready** - Directory structure and component definitions should be clear enough to start coding
 7. **Include diagrams** - Use ASCII art or markdown for data flows and dependencies if helpful
-8. **Entry Points** - Identify every file where meaningful execution begins; use actual paths from the directory structure defined above
-9. **Common Operations** - Derive 2-4 step-by-step guides from the component layers and directory structure; use actual file paths; focus on the tasks a developer will perform most often
-10. **Anti-patterns** - Derive from design tenets (MISSION.md) and component boundary definitions; each anti-pattern should name a specific wrong thing to do and explain what breaks
-11. **Key Decisions** - Only include if ADRs exist in docs/adrs/; link to the actual ADR files
+8. **Testing Strategy** - Before writing this section, read the real test setup: `package.json` test scripts, `tests/` directory structure, and 1-2 existing test files to understand naming conventions and mocking patterns. Populate with real test file paths, not placeholders.
+9. **Entry Points** - Identify every file where meaningful execution begins; use actual paths from the directory structure defined above
+10. **Common Operations** - Derive 2-4 step-by-step guides from the component layers and directory structure; use actual file paths; focus on the tasks a developer will perform most often
+11. **Anti-patterns** - Derive from design tenets (MISSION.md) and component boundary definitions; each anti-pattern should name a specific wrong thing to do and explain what breaks
+12. **Key Decisions** - Only include if ADRs exist in docs/adrs/; link to the actual ADR files
 
 ### Step 3: Validation
 
