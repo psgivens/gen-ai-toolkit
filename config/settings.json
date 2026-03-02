@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(xargs:*)",
+      "Bash(sed:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(cut:*)",
+      "Bash(tr:*)",
+      "Bash(wc:*)",
+      "Bash(awk:*)",
+      "Bash(diff:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
+      "Bash(chmod:*)"
+    ]
+  },
+  "env":{
+    "EDITOR": "/usr/bin/vim"
+  },
+    "hooks": {
+      "Stop": [
+        {
+	  "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash /home/psgivens/utils/gen-ai-dev-kit/config/scripts/claude_stop_hook.sh",
+	      "async": true
+            }
+          ]
+        }
+      ]
+    }
+}
+
+
