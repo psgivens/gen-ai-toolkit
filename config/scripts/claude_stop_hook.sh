@@ -17,4 +17,15 @@ PROJECT="${CLAUDE_PROJECT_DIR##*/}"
 if [ -f "$FLAG" ]; then
     mpg123 -q "$SOUND"
     curl -d "Claude | ${PROJECT} | ${HOOK_NAME}" ntfy.sh/${NTFY_CLAUDE_CODE}
+    powershell.exe -NoProfile -Command "
+\$AppId = 'Claude Code'
+\$Title = 'Claude | ${PROJECT}'
+\$Message = '${HOOK_NAME}'
+[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+[Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
+\$Xml = New-Object Windows.Data.Xml.Dom.XmlDocument
+\$Xml.LoadXml(\"<toast><visual><binding template='ToastGeneric'><text>\$Title</text><text>\$Message</text></binding></visual></toast>\")
+\$Toast = [Windows.UI.Notifications.ToastNotification]::new(\$Xml)
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier(\$AppId).Show(\$Toast)
+" || true
 fi
