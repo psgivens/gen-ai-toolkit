@@ -49,9 +49,10 @@ Examples:
 
 ### Step 4: Resolve Supporting Files
 
-When a workflow references `PATTERNS.md` or a template, use the same base location:
+When a workflow references `PATTERNS.md`, `WRITING_GUIDE.md`, or a template, use the same base location:
 
 - PATTERNS.md → `[location]/PATTERNS.md`
+- WRITING_GUIDE.md → `[location]/WRITING_GUIDE.md`
 - Templates → `[location]/templates/[filename]`
 
 ### Step 5: Create Artifacts Locally
@@ -78,6 +79,7 @@ All task folders, interview files, and output documents are created in the **cur
 ```
 index.md                             — This file (manifest and landing page)
 PATTERNS.md                          — Core patterns used by all workflows
+WRITING_GUIDE.md                     — Document writing and review standards
 
 requirements/workflow.md             — Requirements workflow
 design/workflow.md                   — Design workflow
@@ -95,15 +97,35 @@ templates/ARCHITECTURE_TEMPLATE.md   — Architecture document template
 templates/CLAUDE_PROJECT_TEMPLATE.md — Claude project guidelines template
 ```
 
+## Work Breakdown Structure
+
+Features are organized in three levels:
+
+```
+Epic  (high-level feature area — e.g., "Amazon Photos Integration")
+ └── User Story  (implementable chunk — e.g., "Authenticate with Amazon Photos")
+       └── Task  (tracked in claude/ task folder, implemented via a workflow below)
+```
+
+**When starting a new Epic:** run `requirements → design → architecture` at the epic level first, then break the epic into user stories. Each user story is then implemented via the `plan → implement` or `quick-task` workflow.
+
+**When the scope is already clear** (small feature, clear requirements, fits existing architecture): go straight to `quick-task`.
+
+---
+
 ## Workflow Sequence
 
 ```
-requirements → design → architecture → plan → implement → documentation
-                                                    ↑
-                                   refinement  (invoke at any time independently)
-                                   bug-bash    (invoke at any time independently — multi-bug triage)
-                                   bug         (invoke at any time independently — single bug lifecycle)
-                                   quick-task  (lightweight alternative to full pipeline)
+[Epic level]
+requirements → design → architecture → (story breakdown)
+                                              │
+                                    [User Story level]
+                                    plan → implement → documentation
+                                               ↑
+                          refinement  (invoke at any time independently)
+                          bug-bash    (invoke at any time independently — multi-bug triage)
+                          bug         (invoke at any time independently — single bug lifecycle)
+                          quick-task  (lightweight alternative to plan → implement for small stories)
 ```
 
 ## Overview
@@ -120,4 +142,4 @@ Each workflow conducts a structured interview to gather context, then generates 
 | documentation | All prior docs + codebase | docs/, ARCHITECTURE.md |
 | refinement | (independent) | REFINEMENT_PLAN.md |
 
-See `PATTERNS.md` for complete pattern definitions used across all workflows.
+See `PATTERNS.md` for complete pattern definitions used across all workflows. See `WRITING_GUIDE.md` for document writing and review standards.

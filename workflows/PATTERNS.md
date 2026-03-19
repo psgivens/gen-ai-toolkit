@@ -87,7 +87,7 @@ When starting an interview:
 1. Create interview document (`*_INTERVIEW.md`)
 2. Add "## Interview Round 1" section
 3. Provide **10–12 high-value questions** relevant to the phase (see Phase-Specific Behaviors below)
-   - Mark each question with importance: **[HIGH]** (blocks phase outcome), **[MEDIUM]** (important, has good defaults), or **[LOW]** (nice to know)
+   - Mark each question with importance: **[Blocker]** (blocks phase outcome), **[Important]** (important, has good defaults), or **[Negligible]** (nice to know)
    - Skip questions where Claude can infer the answer or where confirmation adds no value
    - Focus question slots on decisions with multiple valid user-dependent answers
 4. Each question includes:
